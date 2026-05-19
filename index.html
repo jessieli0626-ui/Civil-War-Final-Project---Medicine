@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Geometry Case Files</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#f4efff;--white:#fff;--soft:#fbf9ff;--ink:#34324a;--muted:#77738c;--line:#e6def7;--lav:#b9a7f4;--lav2:#7d67c8;--pink:#ffdce8;--mint:#d9f8e7;--red:#ffe0e0;--gold:#fff1c9;--gold2:#8a5d00}
+body{margin:0;min-height:100vh;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);display:flex;align-items:center;justify-content:center;padding:24px;letter-spacing:-.01em}.app{width:100%;max-width:1160px;background:rgba(255,255,255,.9);border-radius:34px;overflow:visible;box-shadow:0 30px 90px rgba(68,50,122,.18),0 0 0 1px rgba(255,255,255,.85) inset;border:1px solid rgba(255,255,255,.82);backdrop-filter:blur(18px)}
+.ribbon{background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.68));border-bottom:1px solid var(--line);padding:18px 28px;display:flex;justify-content:space-between;gap:14px;align-items:center;backdrop-filter:blur(14px)}.ribbon-title{display:none}.ribbon-stats{display:flex;gap:9px;flex-wrap:wrap}.pill{background:rgba(255,255,255,.68);border:1px solid var(--line);padding:8px 13px;border-radius:999px;font-size:13px;color:var(--ink);box-shadow:0 6px 16px rgba(80,64,130,.05)}
+.content{padding:32px}.screen{display:none}.screen.active{display:block}h1,h2,h3,p{margin-top:0}h1{
+  font-size:clamp(38px,5.4vw,64px);
+  line-height:1.18;
+  letter-spacing:-.035em;
+  margin:0 0 18px;
+  padding:8px 0 10px;
+  overflow:visible;
+  display:inline-block;
+
+  background:linear-gradient(135deg,var(--lav2),var(--lav));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}h2{font-size:30px;letter-spacing:-.035em;margin-bottom:10px}h3{font-size:17px;color:var(--lav2);margin-bottom:12px;letter-spacing:-.02em}.start{text-align:center;padding:46px 18px 46px;overflow:visible}.subtitle{max-width:820px;margin:0 auto 28px;color:var(--muted);font-size:18px;line-height:1.65}
+button{border:none;background:linear-gradient(135deg,var(--lav),var(--lav2));color:#fff;padding:12px 18px;border-radius:18px;font-size:15px;font-weight:750;cursor:pointer;transition:.2s ease;box-shadow:0 12px 28px rgba(125,103,200,.2)}button:hover:not(:disabled){transform:translateY(-2px) scale(1.01);filter:saturate(1.08);box-shadow:0 16px 34px rgba(125,103,200,.26)}button:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}.ghost{background:rgba(255,255,255,.74);color:var(--lav2);border:1px solid var(--line);box-shadow:none;backdrop-filter:blur(8px)}.gold-btn{background:linear-gradient(135deg,#fff1c9,#ffd86b);color:var(--gold2);box-shadow:0 12px 26px rgba(184,130,18,.16);border:1px solid #f0d88f}
+.button-row,.back-row,.tool-row{display:flex;gap:12px;flex-wrap:wrap}.button-row{justify-content:center;margin-top:18px}.back-row{justify-content:space-between;margin-bottom:20px}.tool-row{margin-top:15px}.menu-grid,.concept-grid,.shop-grid,.reward-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}.concept-grid{grid-template-columns:repeat(2,1fr)}.menu-card,.concept-card,.shop-item,.reward-item{background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.52));border:1px solid var(--line);border-radius:26px;padding:22px;text-align:left;box-shadow:0 16px 34px rgba(80,64,130,.08);backdrop-filter:blur(10px);transition:.2s ease}.menu-card:hover,.concept-card:hover,.shop-item:hover,.reward-item:hover{transform:translateY(-3px);box-shadow:0 22px 44px rgba(80,64,130,.12)}.menu-card p,.concept-card p,.shop-item p,.reward-item p{color:var(--muted);line-height:1.5}.shop-section-title,.reward-section-title{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(255,255,255,.62));border:1px solid var(--line);border-radius:22px;padding:16px 20px;box-shadow:0 10px 24px rgba(80,64,130,.06)}.shop-section-title h3,.reward-section-title h3{margin:0 0 4px}.shop-section-title p,.reward-section-title p{margin:0;color:var(--muted);font-size:14px}.owned{background:var(--mint);color:#215a40;border:1px solid #9be3ba;display:inline-block;padding:5px 10px;border-radius:999px;font-size:12px;margin-bottom:10px}
+.layout{display:grid;grid-template-columns:1.03fr .97fr;gap:22px;align-items:stretch}.card{background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.7));border:1px solid var(--line);border-radius:28px;padding:22px;box-shadow:0 18px 42px rgba(80,64,130,.09);backdrop-filter:blur(12px)}.diagram-card{min-height:620px}.diagram-box{background:radial-gradient(circle at top left,rgba(255,255,255,.92),var(--soft));border:1px solid var(--line);min-height:500px;border-radius:24px;display:flex;justify-content:center;align-items:center;padding:12px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}.diagram-box svg{width:100%;max-height:490px;touch-action:none}.diagram-box svg text,.diagram-box svg line,.diagram-box svg polygon,.diagram-box svg circle,.diagram-box svg path,.diagram-box svg rect{cursor:pointer}.diagram-box svg text{paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;fill:#34324a;font-weight:700}.theme-galaxy .diagram-box svg text{stroke:#171a33;fill:#e6e8ff}.diagram-box svg .hot:hover{filter:drop-shadow(0 0 5px rgba(125,103,200,.45));stroke-width:6}.diagram-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}.tiny-btn{font-size:12px;padding:7px 10px;border-radius:999px}.tool-select{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:8px 12px;font-size:12px}.tool-label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:6px 10px;font-size:12px}.tool-label input{width:86px;accent-color:var(--lav2)}.mark-dot{fill:#ff6fa7;stroke:#fff;stroke-width:2}.mark-line{stroke:#ff6fa7;stroke-width:4;stroke-linecap:round}.mark-circle{fill:none;stroke:#ff6fa7;stroke-width:4}.mark-arc{fill:none;stroke:#ff9fc5;stroke-width:5;stroke-linecap:round}.mark-dotted{stroke-dasharray:7 6}.eraser-preview{position:absolute;width:10px;height:10px;border:2px solid #ff3f91;border-radius:50%;pointer-events:none;display:none;z-index:5;background:rgba(255,111,167,.12)}.selected-mark{filter:drop-shadow(0 0 7px rgba(255,111,167,.75));stroke:#ff3f91!important}.diagram-focus{filter:drop-shadow(0 0 6px rgba(125,103,200,.55));font-weight:900!important}.diagram-tip{font-size:13px;color:var(--muted);margin-top:8px}svg{width:100%;max-height:490px}.case-header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.case-title-block p{color:var(--muted);margin:0}.difficulty{border-radius:999px;padding:7px 12px;font-size:13px;background:var(--soft);border:1px solid var(--line);white-space:nowrap;color:var(--muted)}.difficulty.hard{background:var(--gold);color:var(--gold2);border-color:#f0d88f;font-weight:750}.prompt{font-size:18px;line-height:1.5;margin:14px 0 16px}.choices{display:grid;gap:11px}.choice{width:100%;text-align:left;background:rgba(255,255,255,.74);color:var(--ink);border:1px solid var(--line);box-shadow:none;line-height:1.38;border-radius:18px}.choice:hover:not(:disabled){background:linear-gradient(135deg,rgba(255,255,255,.9),var(--soft));border-color:var(--lav);transform:translateY(-1px)}.choice.correct{background:var(--mint);border-color:#9be3ba;color:#215a40}.choice.wrong{background:var(--red);border-color:#f0b4b4;color:#8a3434}.panel{display:none;margin-top:14px;padding:16px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.74),var(--soft));border:1px solid var(--line);line-height:1.55;box-shadow:0 10px 24px rgba(80,64,130,.05)}.panel.show{display:block}.panel strong{color:var(--lav2)}.step-list{margin:8px 0 0 20px;padding:0}.step-list li{margin:8px 0}.progress{height:12px;background:var(--soft);border-radius:999px;border:1px solid var(--line);overflow:hidden;margin-top:12px}.progress-fill{height:100%;width:0%;background:var(--lav);transition:.25s ease}.mini-note{margin-top:12px;color:var(--muted);font-size:14px;line-height:1.45}.input-box{width:100%;max-width:380px;padding:13px 15px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.72);color:var(--ink);font-size:15px;margin:9px auto;display:block;box-shadow:0 8px 18px rgba(80,64,130,.04)}@keyframes correctPop{0%{transform:scale(1);box-shadow:0 0 0 rgba(114,214,160,0)}45%{transform:scale(1.04);box-shadow:0 0 0 8px rgba(114,214,160,.22)}100%{transform:scale(1);box-shadow:0 0 0 rgba(114,214,160,0)}}
+@keyframes confettiFall{0%{transform:translateY(-100vh) rotate(0deg)}100%{transform:translateY(100vh) rotate(720deg)}}
+.confetti{position:fixed;width:8px;height:12px;opacity:0.8;animation:confettiFall 1s linear forwards;z-index:9999}.choice.correct{animation:correctPop .45s ease}
+.hint-bunny{position:relative;padding-left:68px!important;overflow:hidden;min-width:118px}
+.hint-bunny::before{content:'';position:absolute;left:13px;top:50%;width:40px;height:32px;background:radial-gradient(circle at 32% 34%,#fff 0 46%,#ffe8f3 47% 100%);border:2px solid var(--lav2);border-radius:999px;transform:translateY(-50%);box-shadow:inset 7px 2px 0 rgba(255,221,236,.9),0 6px 12px rgba(80,64,130,.14);animation:bunnySoftBob 2.8s ease-in-out infinite}
+.hint-bunny::after{content:'';position:absolute;left:16px;top:calc(50% - 25px);width:13px;height:22px;background:linear-gradient(#fff,#ffe8f3);border:2px solid var(--lav2);border-radius:999px;transform:rotate(-5deg);box-shadow:20px 1px 0 -1px #fff,20px 1px 0 1px var(--lav2),3px 5px 0 -1px #ffc8df,23px 6px 0 -2px #ffc8df;animation:bunnySoftEar 2.8s ease-in-out infinite}
+.hint-bunny .bunny-face{position:absolute;left:18px;top:50%;transform:translateY(-36%);width:32px;height:22px;pointer-events:none;z-index:2;animation:bunnySoftFace 2.8s ease-in-out infinite}
+.hint-bunny .bunny-face::before{content:'⌒  ⌒';position:absolute;left:1px;top:0;font-size:11px;line-height:1;color:var(--lav2);font-weight:900}
+.hint-bunny .bunny-face::after{content:'ᵕ';position:absolute;left:12px;top:8px;font-size:13px;line-height:1;color:#ff6fa7;text-shadow:-10px 2px 0 #ffb7d2,10px 2px 0 #ffb7d2}
+.hint-bunny span{position:relative;z-index:3}
+@keyframes bunnyHop{0%,100%{transform:translateY(-50%) scale(1)}38%{transform:translateY(-70%) scale(1.06) rotate(-2deg)}60%{transform:translateY(-48%) scale(.97,1.04)}}
+@keyframes bunnyEarWiggle{0%,100%{transform:rotate(-13deg)}38%{transform:rotate(4deg)}60%{transform:rotate(-8deg)}}
+@keyframes bunnySoftBob{0%,100%{transform:translateY(-50%)}50%{transform:translateY(-55%)}}
+@keyframes bunnySoftEar{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(2deg)}}
+@keyframes bunnySoftFace{0%,100%{transform:translateY(-36%)}50%{transform:translateY(-41%)}}
+.theme-pink{--bg:#fff0f6;--lav:#ff9fc5;--lav2:#c75683;--line:#ffd3e5;--soft:#fff8fb}.theme-mint{--bg:#ecfeff;--lav:#14b8a6;--lav2:#0f766e;--line:#99f6e4;--soft:#f0fdfa;background:linear-gradient(135deg,#ecfeff,#ccfbf1,#f0fdfa);background-size:220% 220%;animation:themeDrift 12s ease infinite}.theme-sky{--bg:#eef7ff;--lav:#90c7ff;--lav2:#427fbd;--line:#cde7ff;--soft:#f8fcff}.theme-night{--bg:#ede9fe;--lav:#8b5cf6;--lav2:#5b21b6;--line:#ddd6fe;--soft:#f5f3ff}.theme-midnight{--bg:#0b132b;--lav:#3a86ff;--lav2:#a5b4fc;--line:#1e3a8a;--soft:#111c3a;color:#e0e7ff;background:linear-gradient(135deg,#0b132b,#1e3a8a,#111c3a);background-size:240% 240%;animation:themeDrift 14s ease infinite}.theme-galaxy{--bg:#0f1222;--lav:#7c7cff;--lav2:#b8b8ff;--line:#2a2e5a;--soft:#171a33;color:#e6e8ff;background:linear-gradient(135deg,#0f1222,#2a2e5a,#171a33);background-size:240% 240%;animation:themeDrift 15s ease infinite}.theme-lilac{--bg:#faf5ff;--lav:#d8b4fe;--lav2:#9333ea;--line:#eadcff;--soft:#fdfaff}.theme-lemon{--bg:#fffbe8;--lav:#fde68a;--lav2:#ca8a04;--line:#fef3c7;--soft:#fffdf2}.theme-peach{--bg:#fff7ed;--lav:#fb923c;--lav2:#7c2d12;--line:#fed7aa;--soft:#ffedd5;background:linear-gradient(135deg,#fff7ed,#ffedd5,#fed7aa);background-size:220% 220%;animation:themeDrift 12s ease infinite}.theme-cyber{--bg:#0a0a0a;--lav:#22d3ee;--lav2:#a78bfa;--line:#334155;--soft:#111827;color:#e5e7eb;background:linear-gradient(135deg,#0a0a0a,#111827,#312e81);background-size:260% 260%;animation:themeDrift 9s ease infinite}.theme-ink{--bg:#0f172a;--lav:#f97316;--lav2:#fde68a;--line:#334155;--soft:#111827;color:#fef3c7;background:linear-gradient(135deg,#0f172a,#1e293b,#431407);background-size:240% 240%;animation:themeDrift 13s ease infinite}.theme-sakura{--bg:#fff7fb;--lav:#fb7185;--lav2:#881337;--line:#fecdd3;--soft:#fff1f6}.theme-ocean{--bg:#020617;--lav:#e0f2fe;--lav2:#38bdf8;--line:#7dd3fc;--soft:#0f172a;color:#e0f2fe;background:linear-gradient(135deg,#e0f2fe,#020617,#38bdf8);background-size:230% 230%;animation:themeDrift 11s ease infinite}.theme-whiteboard{--bg:#ffffff;--lav:#10b981;--lav2:#047857;--line:#bbf7d0;--soft:#f0fdf4;color:#065f46;background:linear-gradient(135deg,#ffffff,#ecfdf5,#f8fafc);background-size:220% 220%;animation:themeDrift 15s ease infinite}.theme-blush{--bg:#fff1f2;--lav:#f472b6;--lav2:#be185d;--line:#fecdd3;--soft:#fff7f8;background:linear-gradient(135deg,#fff1f2,#fce7f3,#ffe4e6);background-size:220% 220%;animation:themeDrift 12s ease infinite}.theme-neon{--bg:#020617;--lav:#00f5ff;--lav2:#ff2bd6;--line:#164e63;--soft:#0b1120;color:#e5e7eb;background:linear-gradient(135deg,#020617,#164e63,#581c87);background-size:260% 260%;animation:themeDrift 8s ease infinite}.theme-marble{--bg:#0f172a;--lav:#fbbf24;--lav2:#fef3c7;--line:#fde68a;--soft:#1e293b;color:#fef3c7;background:linear-gradient(135deg,#0f172a,#1e293b,#b45309);background-size:240% 240%;animation:themeDrift 14s ease infinite}.theme-marble .card,.theme-marble .menu-card,.theme-marble .concept-card,.theme-marble .shop-item,.theme-marble .reward-item{background:rgba(255,255,255,0.08);color:#fef3c7;border-color:#fde68a}.theme-marble .choice{background:rgba(255,255,255,0.1);color:#fef3c7;border-color:#fbbf24}.theme-marble .choice.correct{background:#fbbf24;color:#0f172a}.theme-marble .choice.wrong{background:#7c2d12;color:#fef3c7}.theme-marble .pill{background:#fbbf24;color:#0f172a}.theme-marble button{color:#0f172a}.theme-marble .card,.theme-marble .menu-card,.theme-marble .concept-card,.theme-marble .shop-item,.theme-marble .reward-item{color:#0f172a}.theme-marble .choice{color:#0f172a}.theme-marble .pill{color:#0f172a}.theme-strawberry{--bg:#fff1f2;--lav:#fb7185;--lav2:#dc2626;--line:#fecdd3;--soft:#fff7f7;color:#7f1d1d;background:linear-gradient(135deg,#fff1f2,#fecdd3,#ffe4e6);background-size:230% 230%;animation:themeDrift 11s ease infinite}.cosmetic-diagram-glow .diagram-box{box-shadow:0 0 0 1px var(--line),0 0 28px rgba(125,103,200,.28),inset 0 0 0 1px rgba(255,255,255,.55)}.cosmetic-star-trail .choice.correct::after{content:' ✦ ✨ ✦';float:right}.cosmetic-gold-frame #profileScreen .reward-item:first-child{border:2px solid #d6b15f;box-shadow:0 0 0 4px rgba(214,177,95,.15),0 18px 42px rgba(184,130,18,.12)}.cosmetic-profile-badge #playerPill::after{content:' · Delulu but Correct';font-weight:800;color:var(--lav2)}.cosmetic-cursor-halo .diagram-box{cursor:crosshair}.cosmetic-glass-cards .card,.cosmetic-glass-cards .menu-card,.cosmetic-glass-cards .shop-item,.cosmetic-glass-cards .reward-item,.cosmetic-glass-cards .concept-card{backdrop-filter:blur(18px) saturate(1.18);background:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.32));border-color:rgba(255,255,255,.72);box-shadow:0 22px 52px rgba(80,64,130,.16),inset 0 0 0 1px rgba(255,255,255,.42)}.cosmetic-proof-ribbon .case-title-block::after{content:'Proof Goblin Certified ✦';display:inline-block;margin-top:8px;background:linear-gradient(135deg,var(--gold),#ffe08a);color:var(--gold2);border:1px solid #f0d88f;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:900;box-shadow:0 8px 18px rgba(184,130,18,.18)}.cosmetic-proof-ribbon .diagram-card::before{content:'✦ Proof Goblin Mode';display:inline-block;margin-bottom:10px;background:var(--gold);color:var(--gold2);border:1px solid #f0d88f;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:900}.cosmetic-focus-pulse .selected-mark{animation:focusPulse 1s ease-in-out infinite}.cosmetic-confetti-plus .confetti{border-radius:50%;box-shadow:0 0 10px currentColor,0 0 18px currentColor;transform-origin:center}.cosmetic-confetti-plus .choice.correct{box-shadow:0 0 0 8px rgba(255,159,197,.18),0 0 28px rgba(185,167,244,.28)}.cosmetic-bunny-hint #hintBtn{background:linear-gradient(135deg,#ffe7f3,var(--lav));color:var(--lav2);border:1px solid #ffc2dd}.boost-note{display:inline-block;margin-top:8px;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.62);border:1px solid var(--line);font-size:12px;color:var(--lav2);font-weight:800}.choice.eliminated{opacity:.35;text-decoration:line-through;filter:grayscale(.45)}@keyframes focusPulse{0%,100%{filter:drop-shadow(0 0 4px rgba(255,63,145,.55))}50%{filter:drop-shadow(0 0 13px rgba(255,63,145,.95))}}
+@keyframes themeDrift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@media(max-width:880px){body{padding:12px}.content{padding:18px}.layout,.menu-grid,.concept-grid,.shop-grid,.reward-grid{grid-template-columns:1fr}.ribbon{flex-direction:column;align-items:flex-start}.diagram-card{min-height:auto}}
+</style>
+<script>
+function showScreenSafe(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var target=document.getElementById(id);
+  if(target)target.classList.add('active');
+}
+function playGuest(){
+  try{window.playerName='Guest';window.isGuest=true;}catch(e){}
+  showScreenSafe('menuScreen');
+}
+function signInOrCreate(){
+  var u=document.getElementById('usernameInput');
+  if(u&&u.value.trim())try{window.playerName=u.value.trim();}catch(e){}
+  showScreenSafe('menuScreen');
+}
+</script>
+</head>
+<body>
+<div class="app">
+<div class="ribbon"><div class="ribbon-title">Geometry Case Files · Mixed Geometry Lab</div><div class="ribbon-stats"><span class="pill" id="playerPill">Player: Guest</span><span class="pill" id="modePill">Mode: Sign In</span><span class="pill" id="scorePill">Score: 0</span><span class="pill" id="gemPill">Gems: 0</span><span class="pill" id="streakPill">Streak: 0</span><span class="pill" id="casePill">Cases: 0</span><span class="pill" id="hintPill">Hints: 0</span></div></div>
+<div class="content">
+<section id="authScreen" class="screen active"><div class="start"><h1>Geometry Case Files</h1><p class="subtitle">Sign in locally to save points, gems, shop items, rewards, and streaks on this device — or play as guest.</p><input id="usernameInput" class="input-box" placeholder="Username"><input id="emailInput" class="input-box" placeholder="Email optional"><input id="pinInput" class="input-box" placeholder="PIN" type="password"><input id="pinConfirmInput" class="input-box" placeholder="Confirm PIN for new account" type="password"><div class="button-row"><button onclick="signInOrCreate()">Sign Up / Sign In</button><button class="ghost" onclick="playGuest()">Play as Guest</button></div><p class="mini-note">This is a local browser profile, not a real online account.</p></div></section>
+<section id="menuScreen" class="screen"><div class="start"><h1>Geometry Case Files</h1><p class="subtitle">Need extra help on Geometry? Practice with mixed geometry problems, theorem chaining, focused concepts, hints, explanations, rewards, and hard problems.</p><div class="menu-grid"><div class="menu-card"><h3>Mixed Mode</h3><p>Multi-step geometry from across all chapters: ratios, area, circles, coordinate, and proof-style reasoning.</p><button onclick="startPractice('mixed')">Start Mixed Mode</button></div><div class="menu-card"><h3>Hard Mode</h3><p>Multi-theorem problems: Ceva, Menelaus, Ptolemy, Euler line, advanced ratio chasing.</p><button class="gold-btn" onclick="startPractice('bonus')">Start Hard Mode</button></div><div class="menu-card"><h3>Concepts</h3><p>Choose a specific concept and drill only that topic.</p><button class="ghost" onclick="showConcepts()">Open Concepts</button></div><div class="menu-card"><h3>Shop</h3><p>Spend Geometry Gems on themes and badges.</p><button class="ghost" onclick="showShop()">Open Shop</button></div><div class="menu-card"><h3>Rewards</h3><p>Claim gems for solving milestones, streaks, and hard problems.</p><button class="ghost" onclick="showRewards()">Open Rewards</button></div><div class="menu-card"><h3>Profile</h3><p>Check your saved account, rank, badges, owned shop items, and geometry grind progress.</p><button class="ghost" onclick="showProfile()">Open Profile</button></div></div><p class="mini-note">Normal cases are 3 points. Bonus cases are 5 points. Correct answers earn Geometry Gems.</p></div></section>
+<section id="profileScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Back to Menu</button><button class="ghost" onclick="showShop()">Shop</button><button class="ghost" onclick="showRewards()">Rewards</button></div><h2>Player Profile</h2><p class="mini-note">Your local save file: rank, gems, points, badges, themes, and all the tiny proof-goblin progress.</p><div class="reward-grid" id="profileGrid"></div></section>
+<section id="shopScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Back to Menu</button><button onclick="startPractice('mixed')">Play</button></div><h2>Geometry Shop</h2><p class="mini-note">Buy cosmetic upgrades with Geometry Gems. Items save on this device.</p><div class="shop-grid" id="shopGrid"></div></section>
+<section id="rewardScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Back to Menu</button><button onclick="startPractice('mixed')">Play</button></div><h2>Rewards</h2><p class="mini-note">Claim rewards after reaching milestones.</p><div class="reward-grid" id="rewardGrid"></div></section>
+<section id="conceptScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Back to Menu</button><button onclick="startPractice('mixed')">Mixed Practice</button></div><h2>Concept Menu</h2><p class="mini-note">Pick a concept. The app generates original questions for that topic.</p><div class="concept-grid" id="conceptGrid"></div></section>
+
+<section id="gameScreen" class="screen"><div class="back-row"><button class="ghost" onclick="showMenu()">← Menu</button><button class="ghost" onclick="showConcepts()">Concepts</button><button class="ghost" onclick="showShop()">Shop</button><button class="ghost" onclick="showRewards()">Rewards</button></div><div class="case-header"><div class="case-title-block"><h2 id="caseTitle">Case Title</h2><p id="caseTopic">Topic</p></div><div class="difficulty" id="difficultyBadge">Standard</div></div><div class="progress"><div class="progress-fill" id="progressFill"></div></div><div class="layout"><div class="card diagram-card"><div class="diagram-toolbar"><select id="shapeTool" class="tool-select" onchange="setDiagramTool(this.value)"><option value="point">Point</option><option value="line">Segment</option><option value="circle">Circle</option><option value="angle">Angle Arc</option><option value="polygon">Polygon</option><option value="free">Free Draw</option><option value="eraseClick">Eraser: Click Object</option><option value="eraseManual">Eraser: Manual</option></select> <label class="tool-label">Sides <input id="polySides" type="number" min="3" value="3" style="width:56px"></label><select id="lineStyle" class="tool-select" onchange="updateSelectedMark()"><option value="solid">Solid</option><option value="dotted">Dotted</option></select><label class="tool-label">Size <input id="shapeSize" type="range" min="8" max="90" value="28" oninput="updateSelectedMark()"></label><label class="tool-label">Rotate <input id="shapeRotate" type="range" min="0" max="360" value="0" oninput="updateSelectedMark()"></label><button class="ghost tiny-btn" onclick="clearDiagramMarks()">Clear Marks</button></div><div class="diagram-box" id="diagramBox"><div id="eraserPreview" class="eraser-preview"></div></div><p class="mini-note" id="diagramNote"></p></div><div class="card"><div class="prompt" id="prompt"></div><div class="choices" id="choices"></div><div class="tool-row"><button class="ghost" id="hintBtn" onclick="showHint()">Hint</button><button class="ghost" id="solutionBtn" onclick="showSolution()" disabled>Step-by-Step Solution</button><button id="nextBtn" onclick="nextCase()" disabled>Next Case</button><button class="gold-btn" onclick="forceBonusCase()">Bonus Case</button></div><div class="panel" id="hintPanel"></div><div class="panel" id="feedbackPanel"></div><div class="panel" id="solutionPanel"></div></div></div></section>
+</div></div>
+<script>
+'use strict';
+
+let currentCase=null;
+let mode='Sign In';
+let score=0, streak=0, totalCases=0, hintsUsed=0;
+let answered=false;
+let gems=0, lifetimePoints=0;
+let playerName='Guest', playerEmail='', isGuest=true;
+let correctTotal=0, hardCorrect=0, bestStreak=0;
+let ownedItems=[], equippedItems=[], claimedRewards=[], activeTheme='default';
+let recent=[], recentPrompts=[], lastCorrectSlots=[];
+let usedHintThisQuestion=false;
+let lastAnswerWrong=false;
+let diagramTool='point';
+let activeConcept=null;
+let pendingLinePoint=null;
+let isDrawingFree=false;
+let currentFreePath=null;
+let selectedMark=null;
+let draggingMark=null;
+let dragOffset={x:0,y:0};
+let eraserDown=false;
+
+const themePreview={
+  'theme-pink':['#fff0f6','#ff9fc5','#c75683'],
+  'theme-mint':['#ecfeff','#14b8a6','#0f766e'],
+  'theme-sky':['#eef7ff','#90c7ff','#427fbd'],
+  'theme-night':['#ede9fe','#8b5cf6','#5b21b6'],
+  'theme-midnight':['#0b132b','#3a86ff','#a5b4fc'],
+  'theme-galaxy':['#0f1222','#7c7cff','#b8b8ff'],
+  'theme-lilac':['#faf5ff','#d8b4fe','#9333ea'],
+  'theme-lemon':['#fffbe8','#fde68a','#ca8a04'],
+  'theme-peach':['#fff7ed','#fb923c','#7c2d12'],
+  'theme-cyber':['#0a0a0a','#22d3ee','#a78bfa'],
+  'theme-ink':['#0f172a','#f97316','#fde68a'],
+  'theme-sakura':['#fff7fb','#fb7185','#881337'],
+  'theme-ocean':['#082f49','#38bdf8','#e0f2fe'],
+  'theme-whiteboard':['#ffffff','#10b981','#047857'],
+  'theme-blush':['#fff1f2','#f472b6','#be185d'],
+  'theme-neon':['#020617','#00f5ff','#ff2bd6'],
+  'theme-marble':['#0f172a','#fbbf24','#f8fafc'],
+  'theme-strawberry':['#fff1f2','#fb7185','#dc2626']
+};
+
+const shopItems=[
+  {id:'pink',name:'Rose Quartz Theme',cost:25,desc:'Soft blush aesthetic.',theme:'theme-pink'},
+  {id:'mint',name:'Mint Axiom Theme',cost:25,desc:'Calm green focus mode.',theme:'theme-mint'},
+  {id:'sky',name:'Sky Compass Theme',cost:25,desc:'Clean blue geometry vibes.',theme:'theme-sky'},
+  {id:'night',name:'Night Scholar Theme',cost:35,desc:'Late-night theorem grind.',theme:'theme-night'},
+  {id:'midnight',name:'Midnight Indigo Theme',cost:40,desc:'Deep blue late-night focus mode.',theme:'theme-midnight'},
+  {id:'galaxy',name:'Galaxy Brain Theme',cost:60,desc:'For cosmic-level geometry.',theme:'theme-galaxy'},
+  {id:'proofBoss',name:'Proof Boss Badge',cost:40,desc:'Boost: every correct answer gives +1 extra Gem automatically.',boost:{type:'gemsFlat',value:1}},
+  {id:'circleWizard',name:'Circle Wizard Badge',cost:45,desc:'Boost: circle-topic questions give +2 extra Gems when correct.',boost:{type:'circleGems',value:2}},
+  {id:'ratioGremlin',name:'Ratio Gremlin Badge',cost:45,desc:'Boost: streak bonus starts after 1 correct answer instead of 2.',boost:{type:'earlyStreak'}},
+  {id:'angleAssassin',name:'Angle Assassin Badge',cost:50,desc:'Boost: every correct answer has a 25% chance to double its Gem reward.',boost:{type:'doubleGems'}},
+  {id:'speedDemon',name:'Speed Demon Badge',cost:60,desc:'Boost: correct answers give +1 extra Gem when you did not use a hint.',boost:{type:'noHintBonus'}},
+  {id:'comebackCore',name:'Comeback Core Badge',cost:70,desc:'Boost: after a wrong answer, your next correct answer gives +3 extra Gems.',boost:{type:'comeback'}},
+  {id:'streakEngine',name:'Streak Engine',cost:140,desc:'Boost: when a streak bonus activates, it gives +2 Gems instead of +1.',boost:{type:'streakBoost'}},
+  {id:'luckyCharm',name:'Lucky Charm',cost:120,desc:'Boost: correct answers randomly earn +1 to +3 extra Gems.',boost:{type:'randomGems'}},
+  {id:'bunnyHint',name:'Bunny Hint Button',cost:80,desc:'Cosmetic: turns the Hint button into a tiny animated bunny button.',cosmetic:{type:'hintBunny'}},
+  {id:'lilac',name:'Lilac Proof Theme',cost:45,desc:'Soft purple study-table energy.',theme:'theme-lilac'},
+  {id:'lemon',name:'Lemon Lemma Theme',cost:45,desc:'Bright yellow theorem mode.',theme:'theme-lemon'},
+  {id:'peach',name:'Peach Diagram Theme',cost:45,desc:'Warm clean geometry workspace.',theme:'theme-peach'},
+  {id:'cyber',name:'Cyber Neon Theme',cost:50,desc:'Sharp black, cyan, and violet theorem-lab energy.',theme:'theme-cyber'},
+  {id:'ink',name:'Ink Notebook Theme',cost:55,desc:'Minimal grayscale notebook look.',theme:'theme-ink'},
+  {id:'hintSaver',name:'Hint Saver Badge',cost:90,desc:'Boost: every other hint does not increase your hint counter.',boost:{type:'hintSaver'}},
+  {id:'hardHunter',name:'Hard Hunter Badge',cost:110,desc:'Boost: +3 extra gems on hard cases.',boost:{type:'hardGems',value:3}},
+  {id:'conceptCollector',name:'Concept Collector Badge',cost:95,desc:'Boost: +1 gem when practicing from Concepts.',boost:{type:'conceptGems',value:1}},
+  {id:'calmMind',name:'Calm Mind Badge',cost:85,desc:'Boost: wrong answers do not reset streak once every 5 cases.',boost:{type:'streakShield'}},
+  {id:'solutionScholar',name:'Solution Scholar Badge',cost:100,desc:'Boost: +1 gem when you view a solution after solving.',boost:{type:'solutionGem'}},
+  {id:'sakura',name:'Sakura Bloom Theme',cost:65,desc:'Soft pink blossom study mode.',theme:'theme-sakura'},
+  {id:'ocean',name:'Ocean Depths Theme',cost:65,desc:'Calm deep-blue problem solving.',theme:'theme-ocean'},
+  {id:'whiteboard',name:'Whiteboard Theme',cost:70,desc:'Clean classroom geometry board.',theme:'theme-whiteboard'},
+  {id:'blush',name:'Blush Sakura Theme',cost:70,desc:'Soft rose-pink study aesthetic.',theme:'theme-blush'},
+  {id:'strawberry',name:'Strawberry Study Theme',cost:75,desc:'Sweet red-pink theme with soft strawberry notes.',theme:'theme-strawberry'},
+  {id:'neon',name:'Neon Cyber Theme',cost:90,desc:'Glowy theorem-lab energy.',theme:'theme-neon'},
+  {id:'marble',name:'Marble Gold Theme',cost:100,desc:'Fancy proof royalty mode.',theme:'theme-marble'},
+  {id:'secondChance',name:'Second Chance Badge',cost:130,desc:'Boost: once every 7 cases, a wrong answer keeps your streak.',boost:{type:'secondChance'}},
+  {id:'autoEliminate',name:'Auto-Eliminate Badge',cost:150,desc:'Boost: when you use a hint, one incorrect answer choice is automatically faded out.',boost:{type:'autoEliminate'}},
+  {id:'doubleNext',name:'Double Next Badge',cost:160,desc:'Boost: every 6th correct answer gives +5 bonus gems.',boost:{type:'doubleNext'}},
+  {id:'diagramGlow',name:'Diagram Glow Cosmetic',cost:75,desc:'Cosmetic: gives diagrams a soft focus glow.',cosmetic:{type:'diagramGlow'}},
+  {id:'starTrail',name:'Star Trail Cosmetic',cost:85,desc:'Cosmetic: adds a tiny sparkle feel to correct-answer moments.',cosmetic:{type:'starTrail'}},
+  {id:'goldFrame',name:'Gold Profile Frame',cost:95,desc:'Profile cosmetic: gold frame energy.',cosmetic:{type:'profileFrame'}},
+  {id:'deluluCorrect',name:'Delulu But Correct Badge',cost:120,desc:'Flex badge: chaotic confidence, mathematically verified.',cosmetic:{type:'profileBadge'}},
+  {id:'cursorHalo',name:'Cursor Halo Cosmetic',cost:65,desc:'Cosmetic: gives the diagram space a precise crosshair feel.',cosmetic:{type:'cursorHalo'}},
+  {id:'glassCards',name:'Frosted Glass Cards',cost:115,desc:'Cosmetic: makes cards feel soft and glassy.',cosmetic:{type:'glassCards'}},
+  {id:'proofRibbon',name:'Proof Goblin Ribbon',cost:125,desc:'Cosmetic: adds a tiny certification ribbon to cases.',cosmetic:{type:'proofRibbon'}},
+  {id:'confettiPlus',name:'Confetti Plus Cosmetic',cost:105,desc:'Cosmetic: makes correct answers feel more celebratory.',cosmetic:{type:'confettiPlus'}},
+  {id:'focusPulse',name:'Focus Pulse Cosmetic',cost:88,desc:'Cosmetic: adds subtle focus drama to selected annotations.',cosmetic:{type:'focusPulse'}}
+];
+
+const rewards=[
+  {id:'firstSolve',name:'First Case Closed',desc:'Solve your first problem correctly.',amount:10,ok:function(){return correctTotal>=1;}},
+  {id:'correct3',name:'Three Clean Solves',desc:'Solve 3 problems correctly.',amount:20,ok:function(){return correctTotal>=3;}},
+  {id:'correct10',name:'Ten-Problem Takeover',desc:'Solve 10 problems correctly.',amount:50,ok:function(){return correctTotal>=10;}},
+  {id:'hard3',name:'Theorem Hunter',desc:'Solve 3 hard problems.',amount:60,ok:function(){return hardCorrect>=3;}},
+  {id:'streak5',name:'Five Streak Flame',desc:'Reach a streak of 5.',amount:75,ok:function(){return bestStreak>=5;}},
+  {id:'points150',name:'150-Point Specialist',desc:'Earn 150 lifetime points.',amount:100,ok:function(){return lifetimePoints>=150;}},
+  {id:'correct25',name:'Twenty-Five Case Sweep',desc:'Solve 25 problems correctly.',amount:120,ok:function(){return correctTotal>=25;}},
+  {id:'correct50',name:'Fifty Proof Takeover',desc:'Solve 50 problems correctly.',amount:220,ok:function(){return correctTotal>=50;}},
+  {id:'hard10',name:'Hard Mode Menace',desc:'Solve 10 hard problems.',amount:160,ok:function(){return hardCorrect>=10;}},
+  {id:'hard25',name:'Nightmare Survivor',desc:'Solve 25 hard problems.',amount:300,ok:function(){return hardCorrect>=25;}},
+  {id:'streak10',name:'Ten Streak Storm',desc:'Reach a streak of 10.',amount:180,ok:function(){return bestStreak>=10;}},
+  {id:'points500',name:'500-Point Legend',desc:'Earn 500 lifetime points.',amount:300,ok:function(){return lifetimePoints>=500;}},
+  {id:'hints20',name:'Hint Explorer',desc:'Use 20 hints while studying.',amount:60,ok:function(){return hintsUsed>=20;}},
+  {id:'correct75',name:'Seventy-Five Solve Streaker',desc:'Solve 75 problems correctly.',amount:360,ok:function(){return correctTotal>=75;}},
+  {id:'correct100',name:'Century Case Closer',desc:'Solve 100 problems correctly.',amount:500,ok:function(){return correctTotal>=100;}},
+  {id:'hard50',name:'Hard Problem Tyrant',desc:'Solve 50 hard problems.',amount:650,ok:function(){return hardCorrect>=50;}},
+  {id:'streak15',name:'Fifteen Streak Firestorm',desc:'Reach a streak of 15.',amount:420,ok:function(){return bestStreak>=15;}},
+  {id:'streak25',name:'Twenty-Five Streak Legend',desc:'Reach a streak of 25.',amount:750,ok:function(){return bestStreak>=25;}},
+  {id:'points1000',name:'1000-Point Geometry Royalty',desc:'Earn 1000 lifetime points.',amount:900,ok:function(){return lifetimePoints>=1000;}},
+  {id:'hints50',name:'Hint Strategist',desc:'Use 50 hints while studying.',amount:180,ok:function(){return hintsUsed>=50;}}
+];
+
+const concepts=[
+  ['similarity','Similarity + Ratios','Similar triangles, scale factors, angle bisectors, Ceva, and symmedians.'],
+  ['circles','Circles','Power of a point, chords, tangents, cyclic quadrilaterals.'],
+  ['coordinate','Coordinate Geometry','Shoelace, distance, slopes, and area.'],
+  ['area','Area Geometry','Area ratios, shaded regions, medians, trapezoids.'],
+  ['right','Right Triangles','Pythagorean triples, altitude to hypotenuse, semicircles.'],
+  ['angles','Angle Chasing','Cyclic angles, incenter angles, exterior angles, polygons.'],
+  ['counting','Geometric Counting','Integer triangles, diagonals, grid figures, configurations.'],
+  ['proofs','Proof Reasons','Congruence, CPCTC, quadrilateral properties, theorem recognition.']
+];
+
+function R(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a||1;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function shuffle(arr){return arr.slice().sort(function(){return Math.random()-0.5;});}
+function accountKey(n){return 'gcf_account_'+String(n).toLowerCase();}
+function emailKey(e){return 'gcf_email_'+String(e).toLowerCase();}
+function resolveLoginId(id){var raw=String(id||'').trim();return raw.indexOf('@')>-1?(localStorage.getItem(emailKey(raw))||raw):raw;}
+function getPin(){var el=document.getElementById('pinInput');return el?el.value:'';}
+function rankName(){if(lifetimePoints>=500)return 'Theorem Royalty';if(lifetimePoints>=300)return 'Geometry Menace';if(lifetimePoints>=150)return 'Proof Boss';if(lifetimePoints>=50)return 'Diagram Detective';return 'New Case Solver';}
+
+function saveProfile(){
+  if(isGuest)return;
+  var data={playerName:playerName,playerEmail:playerEmail,gems:gems,ownedItems:ownedItems,equippedItems:equippedItems,activeTheme:activeTheme,claimedRewards:claimedRewards,score:score,streak:streak,totalCases:totalCases,hintsUsed:hintsUsed,correctTotal:correctTotal,hardCorrect:hardCorrect,bestStreak:bestStreak,lifetimePoints:lifetimePoints,pin:getPin()};
+  localStorage.setItem(accountKey(playerName),JSON.stringify(data));
+  if(playerEmail)localStorage.setItem(emailKey(playerEmail),playerName);
+}
+
+function loadProfile(name,pin){
+  name=resolveLoginId(name);
+  var raw=localStorage.getItem(accountKey(name));
+  if(!raw)return false;
+  var d=JSON.parse(raw);
+  if(String(d.pin)!==String(pin)){alert('Wrong PIN for this username/email.');return true;}
+  playerName=d.playerName||name; playerEmail=d.playerEmail||''; gems=d.gems||0;
+  ownedItems=Array.isArray(d.ownedItems)?d.ownedItems:[];
+  equippedItems=Array.isArray(d.equippedItems)?d.equippedItems:ownedItems.filter(function(id){var item=shopItems.find(function(x){return x.id===id;});return item&&!item.theme;});
+  activeTheme=d.activeTheme||'default'; claimedRewards=Array.isArray(d.claimedRewards)?d.claimedRewards:[];
+  score=d.score||0; streak=d.streak||0; totalCases=d.totalCases||0; hintsUsed=d.hintsUsed||0;
+  correctTotal=d.correctTotal||0; hardCorrect=d.hardCorrect||0; bestStreak=d.bestStreak||0; lifetimePoints=d.lifetimePoints||0;
+  isGuest=false; applyTheme(); updateStats(); return true;
+}
+
+function signInOrCreate(){
+  var u=(document.getElementById('usernameInput').value||'').trim();
+  var e=(document.getElementById('emailInput').value||'').trim();
+  var p=(document.getElementById('pinInput').value||'').trim();
+  var pc=(document.getElementById('pinConfirmInput').value||'').trim();
+  var loginId=u||e;
+  if(!loginId){alert('Enter a username or email.');return;}
+  if(!p){alert('Enter a PIN.');return;}
+  var resolved=resolveLoginId(loginId);
+  if(localStorage.getItem(accountKey(resolved))){var loaded=loadProfile(resolved,p);if(loaded&&!isGuest)showScreen('menuScreen');return;}
+  if(!u){alert('For a new account, enter a username.');return;}
+  if(p!==pc){alert('For a new account, confirm your PIN.');return;}
+  playerName=u; playerEmail=e; isGuest=false; gems=0; ownedItems=[]; equippedItems=[]; activeTheme='default'; claimedRewards=[];
+  score=0; streak=0; totalCases=0; hintsUsed=0; correctTotal=0; hardCorrect=0; bestStreak=0; lifetimePoints=0;
+  saveProfile();
+  try{applyTheme();updateStats();}catch(err){console.error(err);}
+  showScreen('menuScreen');
+}
+
+function playGuest(){
+  playerName='Guest'; playerEmail=''; isGuest=true;
+  gems=0; ownedItems=[]; equippedItems=[]; activeTheme='default'; claimedRewards=[];
+  score=0; streak=0; totalCases=0; hintsUsed=0; correctTotal=0; hardCorrect=0; bestStreak=0; lifetimePoints=0;
+  try{applyTheme();updateStats();}catch(e){console.error(e);}
+  showScreen('menuScreen');
+}
+
+function applyTheme(){
+  document.body.classList.remove('theme-pink','theme-mint','theme-sky','theme-night','theme-midnight','theme-galaxy','theme-lilac','theme-lemon','theme-peach','theme-cyber','theme-ink','theme-sakura','theme-ocean','theme-whiteboard','theme-blush','theme-neon','theme-marble','theme-strawberry','cosmetic-diagram-glow','cosmetic-star-trail','cosmetic-gold-frame','cosmetic-profile-badge','cosmetic-cursor-halo','cosmetic-glass-cards','cosmetic-proof-ribbon','cosmetic-confetti-plus','cosmetic-focus-pulse','cosmetic-bunny-hint');
+  if(activeTheme&&activeTheme!=='default')document.body.classList.add(activeTheme);
+  if(isEquipped('diagramGlow'))document.body.classList.add('cosmetic-diagram-glow');
+  if(isEquipped('starTrail'))document.body.classList.add('cosmetic-star-trail');
+  if(isEquipped('goldFrame'))document.body.classList.add('cosmetic-gold-frame');
+  if(isEquipped('deluluCorrect'))document.body.classList.add('cosmetic-profile-badge');
+  if(isEquipped('cursorHalo'))document.body.classList.add('cosmetic-cursor-halo');
+  if(isEquipped('glassCards'))document.body.classList.add('cosmetic-glass-cards');
+  if(isEquipped('proofRibbon'))document.body.classList.add('cosmetic-proof-ribbon');
+  if(isEquipped('confettiPlus'))document.body.classList.add('cosmetic-confetti-plus');
+  if(isEquipped('focusPulse'))document.body.classList.add('cosmetic-focus-pulse');
+  if(isEquipped('bunnyHint'))document.body.classList.add('cosmetic-bunny-hint');
+  var hint=document.getElementById('hintBtn');
+  if(hint){
+    if(isEquipped('bunnyHint')){
+      hint.classList.add('hint-bunny');
+      hint.innerHTML='<span>Hint</span><div class="bunny-face"></div>';
+    }else{
+      hint.classList.remove('hint-bunny');
+      hint.textContent='Hint';
+    }
+  }
+}
+function isEquipped(id){return equippedItems.indexOf(id)>-1;}
+function equipItem(id){var item=shopItems.find(function(x){return x.id===id;});if(!item||ownedItems.indexOf(id)===-1)return;if(item.theme){activeTheme=item.theme;}else if(equippedItems.indexOf(id)===-1){equippedItems.push(id);}applyTheme();saveProfile();renderShop();updateStats();}
+function unequipItem(id){var item=shopItems.find(function(x){return x.id===id;});if(!item)return;if(item.theme){if(activeTheme===item.theme)activeTheme='default';}else{equippedItems=equippedItems.filter(function(x){return x!==id;});}applyTheme();saveProfile();renderShop();updateStats();}
+function equipDefaultTheme(){activeTheme='default';applyTheme();saveProfile();renderShop();updateStats();}
+function showScreen(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});document.getElementById(id).classList.add('active');}
+function showMenu(){mode='Menu';activeConcept=null;updateStats();showScreen('menuScreen');}
+function showConcepts(){renderConcepts();mode='Concepts';updateStats();showScreen('conceptScreen');}
+function showShop(){renderShop();mode='Shop';updateStats();showScreen('shopScreen');}
+function showRewards(){renderRewards();mode='Rewards';updateStats();showScreen('rewardScreen');}
+function showProfile(){renderProfile();mode='Profile';updateStats();showScreen('profileScreen');}
+
+function updateStats(){
+  document.getElementById('playerPill').textContent='Player: '+playerName;
+  document.getElementById('modePill').textContent='Mode: '+mode;
+  document.getElementById('scorePill').textContent='Score: '+score;
+  document.getElementById('gemPill').textContent='Gems: '+gems;
+  document.getElementById('streakPill').textContent='Streak: '+streak;
+  document.getElementById('casePill').textContent='Cases: '+totalCases;
+  document.getElementById('hintPill').textContent='Hints: '+hintsUsed;
+  var pf=document.getElementById('progressFill'); if(pf)pf.style.width=Math.min((streak%10)*10,100)+'%';
+}
+
+function renderConcepts(){
+  var g=document.getElementById('conceptGrid');g.innerHTML='';
+  concepts.forEach(function(c){var d=document.createElement('div');d.className='concept-card';d.innerHTML='<h3>'+c[1]+'</h3><p>'+c[2]+'</p><button onclick="startPractice(\''+c[0]+'\')">Practice This</button>';g.appendChild(d);});
+}
+
+function shopCategory(item){
+  if(item.theme)return 'Themes';
+  if(item.boost)return 'Boosts';
+  return 'Cosmetics';
+}
+function renderShop(){
+  var g=document.getElementById('shopGrid');g.innerHTML='';
+  var defaultHeader=document.createElement('div');defaultHeader.className='shop-section-title';
+  defaultHeader.innerHTML='<h3>Theme Controls</h3><p>Current theme: <strong>'+(activeTheme==='default'?'Default':(shopItems.find(function(x){return x.theme===activeTheme;})||{}).name||activeTheme)+'</strong></p><button class="ghost" onclick="equipDefaultTheme()">Use Default Theme</button>';
+  g.appendChild(defaultHeader);
+  ['Themes','Boosts','Cosmetics'].forEach(function(cat){
+    var items=shopItems.filter(function(item){return shopCategory(item)===cat;}).sort(function(a,b){return a.cost-b.cost||a.name.localeCompare(b.name);});
+    if(!items.length)return;
+    var header=document.createElement('div');header.className='shop-section-title';header.innerHTML='<h3>'+cat+'</h3><p>Sorted from cheapest to most expensive. Buy items first, then equip or unequip them anytime.</p>';g.appendChild(header);
+    items.forEach(function(item){
+      var owned=ownedItems.indexOf(item.id)>-1;
+      var equipped=item.theme?activeTheme===item.theme:isEquipped(item.id);
+      var d=document.createElement('div');d.className='shop-item';
+      var preview='';
+      if(item.theme){
+        var p=themePreview[item.theme]||['#eee','#ddd','#ccc'];
+        preview='<div style="height:42px;border-radius:14px;margin-bottom:10px;border:1px solid #ddd;background:linear-gradient(90deg,'+p[0]+' 0%,'+p[0]+' 33%,'+p[1]+' 33%,'+p[1]+' 66%,'+p[2]+' 66%,'+p[2]+' 100%);"></div>';
+      }
+      var action='';
+      if(!owned){
+        action='<button onclick="buyItem(\''+item.id+'\')">Buy for '+item.cost+' Gems</button>';
+      }else if(equipped){
+        action='<span class="owned">Equipped</span><br><button class="ghost" onclick="unequipItem(\''+item.id+'\')">Unequip</button>';
+      }else{
+        action='<span class="owned">Owned</span><br><button onclick="equipItem(\''+item.id+'\')">Equip</button>';
+      }
+      var works='';
+      if(item.theme)works='Changes the full app color theme when equipped.';
+      else if(item.boost)works='Gameplay boost only works while equipped.';
+      else works='Cosmetic visual effect only appears while equipped.';
+      d.innerHTML=preview+'<h3>'+item.name+'</h3><p>'+item.desc+'</p><p class="mini-note"><strong>'+cat+'</strong> · '+item.cost+' Gems<br><span class="boost-note">'+works+'</span></p>'+action;
+      g.appendChild(d);
+    });
+  });
+}
+
+function renderProfile(){
+  var g=document.getElementById('profileGrid');
+  var ownedNames=ownedItems.length?ownedItems.map(function(id){var item=shopItems.find(function(x){return x.id===id;});return item?item.name:id;}).join(', '):'No shop items yet — go earn those Geometry Gems.';
+  var claimedNames=claimedRewards.length?claimedRewards.map(function(id){var r=rewards.find(function(x){return x.id===id;});return r?r.name:id;}).join(', '):'No rewards claimed yet.';
+  g.innerHTML='<div class="reward-item"><h3>'+playerName+'</h3><p><strong>Rank:</strong> '+rankName()+'</p><p><strong>Email:</strong> '+(playerEmail||'None saved')+'</p><p><strong>Account type:</strong> '+(isGuest?'Guest mode':'Local saved profile')+'</p></div><div class="reward-item"><h3>Geometry Grind Stats</h3><p><strong>Gems:</strong> '+gems+'</p><p><strong>Lifetime points:</strong> '+lifetimePoints+'</p><p><strong>Total correct:</strong> '+correctTotal+'</p><p><strong>Hard solves:</strong> '+hardCorrect+'</p><p><strong>Best streak:</strong> '+bestStreak+'</p></div><div class="reward-item"><h3>Owned Shop Items</h3><p>'+ownedNames+'</p></div><div class="reward-item"><h3>Claimed Rewards</h3><p>'+claimedNames+'</p></div>';
+}
+
+function buyItem(id){
+  var item=shopItems.find(function(x){return x.id===id;}); if(!item)return;
+  if(ownedItems.indexOf(id)>-1){renderShop();return;}
+  if(gems<item.cost){alert('Not enough Geometry Gems yet. Solve more problems!');return;}
+  gems-=item.cost;
+  ownedItems.push(id);
+  saveProfile();
+  updateStats();
+  renderShop();
+}
+function equipTheme(theme){activeTheme=theme;applyTheme();saveProfile();renderShop();updateStats();}
+
+function renderRewards(){
+  var g=document.getElementById('rewardGrid');
+  g.innerHTML='<div class="reward-item"><h3>Your Rank</h3><p><strong>'+rankName()+'</strong></p><p>Lifetime Points: '+lifetimePoints+'</p><p>Total Correct: '+correctTotal+'</p></div>';
+  var header=document.createElement('div');header.className='reward-section-title';header.innerHTML='<h3>Milestone Rewards</h3><p>Sorted from smallest gem reward to largest.</p>';g.appendChild(header);
+  rewards.slice().sort(function(a,b){return a.amount-b.amount||a.name.localeCompare(b.name);}).forEach(function(r){
+    var claimed=claimedRewards.indexOf(r.id)>-1;var can=r.ok();
+    var d=document.createElement('div');d.className='reward-item';
+    d.innerHTML=(claimed?'<span class="owned">Claimed</span>':'')+'<h3>'+r.name+'</h3><p>'+r.desc+'</p><p class="mini-note">Reward: '+r.amount+' Gems</p><button '+((claimed||!can)?'disabled':'')+' onclick="claimReward(\''+r.id+'\')">'+(claimed?'Claimed':can?'Claim Reward':'Locked')+'</button>';
+    g.appendChild(d);
+  });
+}
+function claimReward(id){var r=rewards.find(function(x){return x.id===id;});if(!r||claimedRewards.indexOf(id)>-1||!r.ok())return;claimedRewards.push(id);gems+=r.amount;saveProfile();updateStats();renderRewards();}
+
+function startPractice(m){
+  mode=m;
+  activeConcept=(m!=='mixed'&&m!=='bonus')?m:null;
+  score=0;streak=0;totalCases=0;recent=[];recentPrompts=[];lastCorrectSlots=[];
+  showScreen('gameScreen');
+  nextCase();
+}
+function forceBonusCase(){
+  loadCase(makeCase(activeConcept || 'bonus'));
+}
+function nextCase(){
+  loadCase(makeCase(activeConcept || mode));
+}
+
+function choiceSet(answer,wrongs){var ans=String(answer);var set=new Set([ans].concat((wrongs||[]).map(String).filter(function(x){return x!==ans&&x!=='NaN'&&x!=='undefined'&&x!=='null';})));var guard=0;while(set.size<5&&guard<80){var n=Number(answer);if(Number.isFinite(n)){var delta=R(-20,20);if(delta!==0&&n+delta>0)set.add(String(n+delta));}else{set.add(ans+' alt '+guard);}guard++;}return Array.from(set).slice(0,5);}
+function validateCase(c){
+  if(!c||!c.prompt||c.answer===undefined||c.answer===null||!c.diagram)return false;
+  var blob=String(c.prompt)+' '+String(c.answer)+' '+String(c.diagram)+' '+String(c.solution||'')+' '+String((c.steps||[]).join(' '));
+  if(/NaN|undefined|null|Infinity/.test(blob))return false;
+  if(!Array.isArray(c.choices))return false;
+  var ans=String(c.answer);
+  var choices=c.choices.map(String);
+  if(choices.indexOf(ans)===-1)return false;
+  if(new Set(choices).size!==choices.length)return false;
+  return true;
+}
+function makeWrongNums(ans,spread){spread=spread||12;var set=new Set();var guard=0;while(set.size<4&&guard<100){var d=R(-spread,spread);if(d!==0&&ans+d>0)set.add(ans+d);guard++;}return Array.from(set);}
+function makeWrongText(ans,arr){var set=new Set((arr||[]).map(String).filter(function(x){return x!==String(ans);}));var guard=0;while(set.size<4&&guard<40){set.add(String(ans)+' alt '+guard);guard++;}return Array.from(set).slice(0,4);}
+function factorChoices(x){return [Math.max(1,x-2),Math.max(1,x-1),x+1,x+2];}
+function simpRoot(n){var outside=1,inside=n;for(var k=2;k*k<=inside;k++){while(inside%(k*k)===0){outside*=k;inside/=k*k;}}if(inside===1)return String(outside);if(outside===1)return '√'+inside;return outside+'√'+inside;}
+function arrangeChoices(choices,answer){var correct=String(answer);var wrongs=shuffle(choices.map(String).filter(function(x){return x!==correct;})).slice(0,4);while(wrongs.length<4)wrongs.push('Extra choice '+wrongs.length);var slot;do{slot=Math.floor(Math.random()*5);}while(lastCorrectSlots.length>=2&&lastCorrectSlots[0]===slot&&lastCorrectSlots[1]===slot);lastCorrectSlots.push(slot);if(lastCorrectSlots.length>2)lastCorrectSlots.shift();var out=[],w=0;for(var i=0;i<5;i++)out[i]=i===slot?correct:wrongs[w++];return out;}
+function Q(type,title,topic,diff,points,prompt,answer,wrong,hint,explain,steps,diagram,note){return{type:type,title:title,topic:topic,diff:diff,points:points,prompt:prompt,answer:String(answer),choices:choiceSet(answer,wrong),hint:hint,explain:explain,steps:steps,diagram:diagram,note:note};}
+
+function getBank(){
+  var bank={
+    similarity:safeFns([qSimilarScale,qAreaScale,qSimilarPerimeter,qSimilarityMissingSide,qTriangleMidlineRatio,qParallelCutRatio,qSimilarityAA,qSimilaritySAS,qAngleBisectorArea,qCeva,qSymmedian]),
+    circles:safeFns([qIntersectChords,qTangentSecant,qCyclicPtolemy,qSecantQuadratic,qTangentRadiusArea,qBrokenChord,qEqualPowers,qInscribedAngleArc,qTangentChordAngle,qCentralAngleArc,qCircleSectorArea]),
+    coordinate:safeFns([qCoordinateRectangleArea,qSlopeParallel,qDistanceSquared,qCoordinateArea,qMidpointDistance,qShoelaceParam]),
+    area:safeFns([qTrapezoid,qShadedRectangle,qParallelogramTriangleArea,qMedialArea,qMedianArea,qViviani,qAreaScale,qAngleBisectorArea]),
+    right:safeFns([qPythagoreanMissingLeg,qThirtySixtyNinety,qAltitudeHypotenuse,qScaledTriple,qSemicircleChord,qRightRatio,qMedianLength]),
+    angles:safeFns([qPolygonInterior,qParallelAlgebra,qAltInterior,qCorrespondingAngles,qExteriorAlgebra,qCyclicAngle,qTriangleAngleSum,qIsoscelesBaseAngle,qIncenterAngle]),
+    counting:safeFns([qGridSquares,qRectGridCount,qDiagonals,qHandshakeDiagonals,qPolygonTriangulations,qTriangleCounting,qIntegerIsosceles]),
+    proofs:safeFns([qParallelogramProof,qRhombusProof,qKiteProof,qRhombusDiagonals,qSSSReason,qSASReason,qASAReason,qAASReason,qHLReason,qSimilarityReason,qSASSimilarityReason,qSSSSimilarityReason,qCPCTC]),
+    bonus:safeFns([qMenelaus,qEulerLine,qSymmedian,qTangentSecant,qSecantQuadratic,qIntersectChords,qCeva,qShoelaceParam,qBrokenChord,qViviani,qCentroidRatio,qEqualPowers,qCyclicPtolemy,qSemicircleChord,qHandshakeDiagonals,qTriangleMidlineRatio,qInscribedAngleArc,qShadedRectangle,qThirtySixtyNinety,qSimilarityAA,qSimilaritySAS,qHLReason])
+  };
+  bank.mixed=[].concat(
+    bank.coordinate,bank.circles,bank.counting,bank.area,bank.angles,bank.proofs,
+    bank.coordinate,bank.circles,bank.counting,bank.area,
+    bank.similarity,bank.right
+  );
+  return bank;
+}
+function validateCase(c){
+  if(!c||!c.prompt||!c.answer||!c.diagram)return false;
+  var joined=String(c.prompt)+' '+String(c.answer)+' '+String(c.diagram)+' '+String(c.explain||'');
+  if(/NaN|undefined|null/.test(joined))return false;
+  if(!Array.isArray(c.choices)||c.choices.map(String).indexOf(String(c.answer))===-1)return false;
+  if(new Set(c.choices.map(String)).size!==c.choices.length)return false;
+  if(!Array.isArray(c.steps)||c.steps.length===0)return false;
+  return true;
+}
+function fallbackCase(){return Q('fallback','Triangle Warm-Up','Safe fallback','Hard · 3 points',3,'In triangle ABC, the angles are 50°, 60°, and x°. Find x.',70,[60,65,75,80],'The angles in a triangle add to 180°.', 'x=180−50−60=70°.', ['Triangle angles sum to 180°.','50°+60°=110°.','x=180°−110°=70°.'], svgTri('A','B','C','','','',50+'°',60+'°','?'), 'Safe fallback triangle.');}
+function makeCase(m){
+  var bank=getBank();
+  var conceptKeys=concepts.map(function(c){return c[0];});
+  var requested=m;
+  if(activeConcept && conceptKeys.indexOf(activeConcept)>-1){requested=activeConcept;}
+  var pool=bank[requested];
+  if(!Array.isArray(pool)||pool.length===0){pool=bank.mixed;}
+  if(!Array.isArray(pool)||pool.length===0){return fallbackCase();}
+
+  for(var i=0;i<60;i++){
+    try{
+      var fn=pick(pool);
+      if(typeof fn!=='function')continue;
+      var c=fn();
+      if(validateCase(c)&&String(c.diagram).indexOf('<svg')>-1){
+        if(recent.indexOf(c.type)===-1&&recentPrompts.indexOf(c.prompt)===-1)return c;
+      }
+    }catch(e){console.error('Question generator failed:',e);}
+  }
+
+  for(var j=0;j<pool.length;j++){
+    try{
+      var c2=pool[j]();
+      if(validateCase(c2))return c2;
+    }catch(e2){console.error('Backup generator failed:',e2);}
+  }
+  return fallbackCase();
+}
+function loadCase(c){
+  applyTheme();
+  currentCase=c;answered=false;usedHintThisQuestion=false;totalCases++;recent.push(c.type);if(recent.length>8)recent.shift();recentPrompts.push(c.prompt);if(recentPrompts.length>20)recentPrompts.shift();
+  document.getElementById('caseTitle').textContent=c.title;document.getElementById('caseTopic').textContent=c.topic;document.getElementById('prompt').textContent=c.prompt;document.getElementById('diagramBox').innerHTML=c.diagram+'<div id="eraserPreview" class="eraser-preview"></div>';document.getElementById('diagramNote').innerHTML=c.note+'<br><span class="diagram-tip">Interactive: click labels/sides to highlight them, mark points, or draw helper segments.</span>';activateDiagram();
+  var badge=document.getElementById('difficultyBadge');badge.textContent=c.diff;badge.className=c.points>=5?'difficulty hard':'difficulty';
+  var box=document.getElementById('choices');box.innerHTML='';arrangeChoices(c.choices,c.answer).forEach(function(a){var btn=document.createElement('button');btn.type='button';btn.className='choice';btn.textContent=String(a);btn.dataset.answer=String(a);btn.addEventListener('click',function(){checkAnswer(this,this.dataset.answer);});box.appendChild(btn);});
+  ['hintPanel','feedbackPanel','solutionPanel'].forEach(function(id){var p=document.getElementById(id);p.className='panel';p.innerHTML='';});
+  document.getElementById('hintBtn').disabled=false;document.getElementById('solutionBtn').disabled=true;document.getElementById('nextBtn').disabled=true;saveProfile();updateStats();
+}
+function buildDiagramLabelCard(c){
+  var text=(c.prompt||'')+' '+(c.title||'');
+  var cleaned=text.replace(/[.,?]/g,' ');
+  var words=cleaned.split(' ');
+  var chips=[];
+  function addChip(kind,value,cls){
+    if(!value)return;
+    var html='<span class="diagram-chip '+(cls||'')+'">'+kind+': '+value+'</span>';
+    if(chips.indexOf(html)===-1)chips.push(html);
+  }
+  for(var i=0;i<words.length;i++){
+    var w=words[i];
+    if(!w)continue;
+    if(w.indexOf('°')>-1)addChip('Angle',w,'angle-chip');
+    if(w.indexOf('(')>-1&&w.indexOf(')')>-1)addChip('Point',w,'coord-chip');
+    if(w.indexOf('=')>-1)addChip('Given',w,'');
+    if(w.indexOf(':')>-1&&w.length<16)addChip('Ratio',w,'');
+    if((w==='by'||w==='and')&&i>0&&i+1<words.length)addChip('Numbers',words[i-1]+' '+w+' '+words[i+1],'');
+    if(w.toLowerCase()==='base'&&i+1<words.length)addChip('Length','base '+words[i+1],'');
+    if(w.toLowerCase()==='height'&&i+1<words.length)addChip('Length','height '+words[i+1],'');
+  }
+  var lower=cleaned.toLowerCase();
+  var f=lower.indexOf('find ');
+  if(f>-1){
+    var target=cleaned.slice(f+5).split('  ')[0].trim();
+    if(target.length>40)target=target.slice(0,40)+'...';
+    addChip('Find',target,'target-chip');
+  }
+  if(chips.length===0)addChip('Note','Use the letters, side marks, and angle marks shown in the diagram.','');
+  return '<div class="diagram-label-card"><strong>Current diagram labels:</strong><div class="diagram-label-grid">'+chips.join('')+'</div></div>';
+}
+function getShapeSize(){var el=document.getElementById('shapeSize');return el?Number(el.value):28;}
+function getShapeRotate(){var el=document.getElementById('shapeRotate');return el?Number(el.value):0;}
+function getLineStyle(){var el=document.getElementById('lineStyle');return el?el.value:'solid';}
+
+function setDiagramTool(tool){diagramTool=tool;pendingLinePoint=null;isDrawingFree=false;currentFreePath=null;eraserDown=false;var box=document.getElementById('diagramBox');var prev=document.getElementById('eraserPreview');if(!prev&&box){box.insertAdjacentHTML('beforeend','<div id="eraserPreview" class="eraser-preview"></div>');prev=document.getElementById('eraserPreview');}if(prev)prev.style.display=(tool==='eraseManual')?'block':'none';}
+function selectMark(el){if(selectedMark)selectedMark.classList.remove('selected-mark');selectedMark=el;if(selectedMark)selectedMark.classList.add('selected-mark');}
+function makeMarkSelectable(el){el.addEventListener('click',function(evt){evt.stopPropagation();if(diagramTool==='eraseClick'){eraseMarkElement(el);return;}selectMark(el);});el.addEventListener('pointerdown',function(evt){if(diagramTool==='eraseManual'||diagramTool==='eraseClick'){evt.stopPropagation();eraseMarkElement(el);return;}evt.stopPropagation();selectMark(el);startDragMark(el,evt);});return el;}
+function getMarkCenter(el){if(el.tagName==='circle')return{x:Number(el.getAttribute('cx')),y:Number(el.getAttribute('cy'))};if(el.tagName==='polygon')return{x:Number(el.dataset.cx),y:Number(el.dataset.cy)};if(el.tagName==='path')return{x:Number(el.dataset.cx||0),y:Number(el.dataset.cy||0)};if(el.tagName==='line')return{x:(Number(el.getAttribute('x1'))+Number(el.getAttribute('x2')))/2,y:(Number(el.getAttribute('y1'))+Number(el.getAttribute('y2')))/2};return{x:0,y:0};}
+function startDragMark(el,evt){var svg=document.querySelector('#diagramBox svg');if(!svg)return;draggingMark=el;var p=svgPointFromEvent(svg,evt);var c=getMarkCenter(el);dragOffset={x:p.x-c.x,y:p.y-c.y};}
+function moveSelectedMarkTo(x,y){var el=draggingMark;if(!el)return;if(el.tagName==='circle'){el.setAttribute('cx',x);el.setAttribute('cy',y);}else if(el.tagName==='line'){var cx=(Number(el.getAttribute('x1'))+Number(el.getAttribute('x2')))/2,cy=(Number(el.getAttribute('y1'))+Number(el.getAttribute('y2')))/2,dx=x-cx,dy=y-cy;el.setAttribute('x1',Number(el.getAttribute('x1'))+dx);el.setAttribute('y1',Number(el.getAttribute('y1'))+dy);el.setAttribute('x2',Number(el.getAttribute('x2'))+dx);el.setAttribute('y2',Number(el.getAttribute('y2'))+dy);}else if(el.tagName==='path'){el.dataset.cx=x;el.dataset.cy=y;updateSelectedMark();}else if(el.tagName==='polygon'){el.dataset.cx=x;el.dataset.cy=y;updateSelectedMark();}}
+function applyLineStyle(el){if(getLineStyle()==='dotted')el.classList.add('mark-dotted');else el.classList.remove('mark-dotted');}
+function polygonPoints(cx,cy,sides,size,rotDeg){
+  var rot=rotDeg*Math.PI/180;
+  var points=[];
+  for(var i=0;i<sides;i++){
+    var a=(2*Math.PI*i)/sides+rot-Math.PI/2;
+    var x=cx+size*Math.cos(a);
+    var y=cy+size*Math.sin(a);
+    points.push(x+','+y);
+  }
+  return points.join(' ');
+}
+function updateSelectedMark(){if(!selectedMark)return;var size=getShapeSize(),rot=getShapeRotate();if(selectedMark.tagName==='circle'){if(selectedMark.classList.contains('mark-dot'))selectedMark.setAttribute('r',Math.max(4,size/5));else selectedMark.setAttribute('r',size);var cx=selectedMark.getAttribute('cx'),cy=selectedMark.getAttribute('cy');if(cx&&cy)selectedMark.setAttribute('transform','rotate('+rot+' '+cx+' '+cy+')');}if(selectedMark.tagName==='line'){selectedMark.setAttribute('stroke-width',Math.max(2,size/12));applyLineStyle(selectedMark);}if(selectedMark.tagName==='path'){selectedMark.setAttribute('stroke-width',Math.max(2,size/14));applyLineStyle(selectedMark);if(selectedMark.classList.contains('mark-arc')){var cx=Number(selectedMark.dataset.cx),cy=Number(selectedMark.dataset.cy),deg=60;var endX=cx+size*Math.cos(deg*Math.PI/180),endY=cy-size*Math.sin(deg*Math.PI/180);selectedMark.setAttribute('d','M '+(cx+size)+' '+cy+' A '+size+' '+size+' 0 0 0 '+endX+' '+endY);selectedMark.setAttribute('transform','rotate('+rot+' '+cx+' '+cy+')');}}if(selectedMark.tagName==='polygon'){var cx=Number(selectedMark.dataset.cx),cy=Number(selectedMark.dataset.cy),sides=Number(selectedMark.dataset.sides)||3;if(cx&&cy){selectedMark.setAttribute('points',polygonPoints(cx,cy,sides,size,rot));}selectedMark.setAttribute('stroke-width',Math.max(2,size/14));applyLineStyle(selectedMark);}}
+
+function clearDiagramMarks(){var svg=document.querySelector('#diagramBox svg');if(!svg)return;svg.querySelectorAll('.user-mark').forEach(function(el){el.remove();});pendingLinePoint=null;selectedMark=null;draggingMark=null;}
+function eraseMarkElement(el){if(el&&el.classList&&el.classList.contains('user-mark')){el.remove();if(selectedMark===el)selectedMark=null;}}
+function eraseNearestMark(svg,p){var marks=Array.from(svg.querySelectorAll('.user-mark'));var best=null,bestDist=999999;marks.forEach(function(el){var c=getMarkCenter(el);var dx=c.x-p.x,dy=c.y-p.y;var dist=Math.sqrt(dx*dx+dy*dy);if(dist<bestDist){bestDist=dist;best=el;}});if(best&&bestDist<14)eraseMarkElement(best);}
+function rebuildFreePath(path,points){
+  if(points.length<2){path.remove();return;}
+  var d='';
+  var drawing=false;
+  points.forEach(function(pt){
+    if(pt.erase){drawing=false;return;}
+    if(!drawing){d+='M '+pt.x+' '+pt.y+' ';drawing=true;}
+    else d+='L '+pt.x+' '+pt.y+' ';
+  });
+  if(d.trim()===''){path.remove();return;}
+  path.setAttribute('d',d.trim());
+  path.dataset.points=JSON.stringify(points);
+}
+function eraseFreeDrawAt(svg,p){
+  var radius=7;
+  svg.querySelectorAll('.user-mark[data-free="true"]').forEach(function(path){
+    var points=[];
+    try{points=JSON.parse(path.dataset.points||'[]');}catch(e){points=[];}
+    if(!points.length)return;
+    var changed=false;
+    points.forEach(function(pt){
+      if(pt.erase)return;
+      var dx=pt.x-p.x,dy=pt.y-p.y;
+      if(Math.sqrt(dx*dx+dy*dy)<=radius){pt.erase=true;changed=true;}
+    });
+    if(changed)rebuildFreePath(path,points);
+  });
+}
+function updateEraserPreview(evt){var box=document.getElementById('diagramBox');var prev=document.getElementById('eraserPreview');if(!box||!prev)return;if(diagramTool!=='eraseManual'){prev.style.display='none';return;}var r=box.getBoundingClientRect();prev.style.display='block';prev.style.left=(evt.clientX-r.left-5)+'px';prev.style.top=(evt.clientY-r.top-5)+'px';}
+function svgPointFromEvent(svg,evt){var pt=svg.createSVGPoint();pt.x=evt.clientX;pt.y=evt.clientY;return pt.matrixTransform(svg.getScreenCTM().inverse());}
+function addUserPoint(svg,p){var c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r',Math.max(4,getShapeSize()/5));c.setAttribute('class','user-mark mark-dot');makeMarkSelectable(c);svg.appendChild(c);selectMark(c);}
+function addUserLine(svg,p1,p2){var l=document.createElementNS('http://www.w3.org/2000/svg','line');l.setAttribute('x1',p1.x);l.setAttribute('y1',p1.y);l.setAttribute('x2',p2.x);l.setAttribute('y2',p2.y);l.setAttribute('class','user-mark mark-line');l.setAttribute('stroke-width',Math.max(2,getShapeSize()/12));applyLineStyle(l);makeMarkSelectable(l);svg.appendChild(l);selectMark(l);}
+function addUserCircle(svg,p){var c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r',getShapeSize());c.setAttribute('class','user-mark mark-circle');applyLineStyle(c);makeMarkSelectable(c);svg.appendChild(c);selectMark(c);}
+function addUserArc(svg,p){var size=getShapeSize();var deg=60;var rot=getShapeRotate();var path=document.createElementNS('http://www.w3.org/2000/svg','path');var endX=p.x+size*Math.cos(deg*Math.PI/180),endY=p.y-size*Math.sin(deg*Math.PI/180);path.setAttribute('d','M '+(p.x+size)+' '+p.y+' A '+size+' '+size+' 0 0 0 '+endX+' '+endY);path.setAttribute('class','user-mark mark-arc');path.dataset.cx=p.x;path.dataset.cy=p.y;path.setAttribute('transform','rotate('+rot+' '+p.x+' '+p.y+')');applyLineStyle(path);makeMarkSelectable(path);svg.appendChild(path);selectMark(path);} 
+function addUserPolygon(svg,p){var raw=Number(document.getElementById('polySides')?.value||3);var sides=Math.max(3,Math.floor(raw));var r=getShapeSize();var poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');poly.setAttribute('points',polygonPoints(p.x,p.y,sides,r,getShapeRotate()));poly.setAttribute('class','user-mark mark-line');poly.setAttribute('fill','none');poly.dataset.cx=p.x;poly.dataset.cy=p.y;poly.dataset.sides=sides;poly.setAttribute('stroke-width',Math.max(2,r/14));applyLineStyle(poly);makeMarkSelectable(poly);svg.appendChild(poly);selectMark(poly);} 
+function startFreeDraw(svg,p){isDrawingFree=true;currentFreePath=document.createElementNS('http://www.w3.org/2000/svg','path');currentFreePath.setAttribute('d','M '+p.x+' '+p.y);currentFreePath.setAttribute('class','user-mark mark-line');currentFreePath.setAttribute('stroke-width',Math.max(2,getShapeSize()/14));currentFreePath.setAttribute('fill','none');currentFreePath.dataset.free='true';currentFreePath.dataset.points=JSON.stringify([{x:p.x,y:p.y}]);applyLineStyle(currentFreePath);makeMarkSelectable(currentFreePath);svg.appendChild(currentFreePath);selectMark(currentFreePath);}
+function continueFreeDraw(svg,p){if(!isDrawingFree||!currentFreePath)return;var points=[];try{points=JSON.parse(currentFreePath.dataset.points||'[]');}catch(e){points=[];}points.push({x:p.x,y:p.y});currentFreePath.dataset.points=JSON.stringify(points);currentFreePath.setAttribute('d',currentFreePath.getAttribute('d')+' L '+p.x+' '+p.y);}
+function stopFreeDraw(){isDrawingFree=false;currentFreePath=null;}
+function activateDiagram(){var box=document.getElementById('diagramBox');if(box&&!document.getElementById('eraserPreview'))box.insertAdjacentHTML('beforeend','<div id="eraserPreview" class="eraser-preview"></div>');var svg=document.querySelector('#diagramBox svg');if(!svg)return;svg.querySelectorAll('line,polygon,path,circle,rect,text').forEach(function(el){el.classList.add('hot');el.addEventListener('click',function(evt){if(diagramTool==='free'||diagramTool==='eraseManual')return;if(diagramTool==='eraseClick'){evt.stopPropagation();eraseMarkElement(el);return;}evt.stopPropagation();el.classList.toggle('diagram-focus');});});svg.addEventListener('click',function(evt){if(diagramTool==='free'||diagramTool==='eraseManual')return;var p=svgPointFromEvent(svg,evt);if(diagramTool==='eraseClick'){eraseNearestMark(svg,p);return;}if(diagramTool==='point'){addUserPoint(svg,p);}else if(diagramTool==='circle'){addUserCircle(svg,p);}else if(diagramTool==='angle'){addUserArc(svg,p);}else if(diagramTool==='line'){if(!pendingLinePoint){pendingLinePoint=p;addUserPoint(svg,p);}else{addUserLine(svg,pendingLinePoint,p);pendingLinePoint=null;}}else if(diagramTool==='polygon'){addUserPolygon(svg,p);} });svg.addEventListener('pointerdown',function(evt){if(diagramTool==='eraseManual'){evt.preventDefault();eraserDown=true;updateEraserPreview(evt);eraseFreeDrawAt(svg,svgPointFromEvent(svg,evt));return;}if(diagramTool!=='free')return;evt.preventDefault();var p=svgPointFromEvent(svg,evt);startFreeDraw(svg,p);});svg.addEventListener('pointermove',function(evt){if(diagramTool==='eraseManual'){updateEraserPreview(evt);if(eraserDown){evt.preventDefault();eraseFreeDrawAt(svg,svgPointFromEvent(svg,evt));}return;}if(diagramTool!=='free'||!isDrawingFree)return;evt.preventDefault();var p=svgPointFromEvent(svg,evt);continueFreeDraw(svg,p);});svg.addEventListener('pointermove',function(evt){if(!draggingMark||diagramTool==='eraseManual'||diagramTool==='eraseClick')return;evt.preventDefault();var p=svgPointFromEvent(svg,evt);moveSelectedMarkTo(p.x-dragOffset.x,p.y-dragOffset.y);});svg.addEventListener('pointerup',function(){eraserDown=false;draggingMark=null;stopFreeDraw();});svg.addEventListener('pointerleave',function(){eraserDown=false;var prev=document.getElementById('eraserPreview');if(prev)prev.style.display='none';draggingMark=null;stopFreeDraw();});}
+function showHint(){
+  if(!currentCase)return;
+  usedHintThisQuestion=true;
+  var boosts=getBoosts();
+  if(!(boosts.hintSaver&&totalCases%2===0))hintsUsed++;
+  var p=document.getElementById('hintPanel');
+  p.innerHTML='<strong>Hint:</strong> '+currentCase.hint+(boosts.autoEliminate?' <br><em>Auto-Eliminate active: one incorrect answer has been faded out.</em>':'');
+  if(boosts.autoEliminate){autoEliminateOneChoice();}
+  p.classList.add('show');
+  document.getElementById('hintBtn').disabled=true;
+  saveProfile();
+  updateStats();
+}
+function getBoosts(){
+  var boosts={
+    gemsFlat:0,
+    circleGems:0,
+    doubleGems:0,
+    earlyStreak:false,
+    streakBoost:false,
+    noHintBonus:false,
+    comeback:false,
+    randomGems:false,
+    hintSaver:false,
+    hardGems:0,
+    conceptGems:0,
+    streakShield:false,
+    solutionGem:false,
+    secondChance:false,
+    autoEliminate:false,
+    doubleNext:false
+  };
+  equippedItems.forEach(function(id){
+    var it=shopItems.find(function(x){return x.id===id;});
+    if(!it||!it.boost||ownedItems.indexOf(id)===-1)return;
+    var b=it.boost;
+    if(b.type==='gemsFlat')boosts.gemsFlat+=b.value||1;
+    if(b.type==='circleGems')boosts.circleGems+=b.value||1;
+    if(b.type==='doubleGems')boosts.doubleGems+=1;
+    if(b.type==='earlyStreak')boosts.earlyStreak=true;
+    if(b.type==='streakBoost')boosts.streakBoost=true;
+    if(b.type==='noHintBonus')boosts.noHintBonus=true;
+    if(b.type==='comeback')boosts.comeback=true;
+    if(b.type==='randomGems')boosts.randomGems=true;
+    if(b.type==='hintSaver')boosts.hintSaver=true;
+    if(b.type==='hardGems')boosts.hardGems+=b.value||1;
+    if(b.type==='conceptGems')boosts.conceptGems+=b.value||1;
+    if(b.type==='streakShield')boosts.streakShield=true;
+    if(b.type==='solutionGem')boosts.solutionGem=true;
+    if(b.type==='secondChance')boosts.secondChance=true;
+    if(b.type==='autoEliminate')boosts.autoEliminate=true;
+    if(b.type==='doubleNext')boosts.doubleNext=true;
+  });
+  return boosts;
+}
+function autoEliminateOneChoice(){
+  if(!currentCase)return;
+  var wrongs=Array.from(document.querySelectorAll('.choice')).filter(function(btn){return String(btn.dataset.answer||btn.textContent).trim()!==String(currentCase.answer).trim()&&!btn.classList.contains('eliminated');});
+  if(wrongs.length){pick(wrongs).classList.add('eliminated');}
+}
+function checkAnswer(btn,a){
+  if(answered||!currentCase)return;answered=true;
+  var selected=String(a).trim();var correct=String(currentCase.answer).trim();
+  document.querySelectorAll('.choice').forEach(function(x){x.disabled=true;if(String(x.dataset.answer||x.textContent).trim()===correct)x.classList.add('correct');});
+  var f=document.getElementById('feedbackPanel');var boosts=getBoosts();
+  if(selected===correct){
+    triggerConfetti();
+    var gemGain=currentCase.points;
+    if(boosts.randomGems)gemGain+=R(1,3);
+    if(streak>=(boosts.earlyStreak?1:2))gemGain+=(boosts.streakBoost?2:1);
+    gemGain+=boosts.gemsFlat;
+    if(currentCase.topic.toLowerCase().indexOf('circle')>-1)gemGain+=boosts.circleGems;
+    if(boosts.noHintBonus&&!usedHintThisQuestion)gemGain+=1;
+    if(boosts.doubleGems>0&&Math.random()<0.25)gemGain*=2;
+    if(boosts.comeback&&lastAnswerWrong)gemGain+=3;
+    if(boosts.doubleNext&&correctTotal>0&&correctTotal%6===0)gemGain+=5;
+    if(currentCase.points>=5)gemGain+=boosts.hardGems;
+    if(activeConcept)gemGain+=boosts.conceptGems;
+    gems+=gemGain;score+=currentCase.points;lifetimePoints+=currentCase.points;streak++;correctTotal++;
+    if(currentCase.points>=5)hardCorrect++;
+    bestStreak=Math.max(bestStreak,streak);
+    lastAnswerWrong=false;
+    btn.classList.add('correct');
+    f.innerHTML='<strong>Correct.</strong> +'+gemGain+' Geometry Gems. '+currentCase.explain;
+  } else {
+    if((boosts.streakShield&&totalCases%5===0)||(boosts.secondChance&&totalCases%7===0)){}else{streak=0;}lastAnswerWrong=true;
+    btn.classList.add('wrong');
+    f.innerHTML='<strong>Not quite.</strong> Correct answer: <strong>'+currentCase.answer+'</strong>. '+currentCase.explain;
+  }
+  f.classList.add('show');
+  document.getElementById('solutionBtn').disabled=false;
+  document.getElementById('nextBtn').disabled=false;
+  saveProfile();updateStats();
+}
+function tutorInfo(c){var t=(c.title+' '+c.topic+' '+c.prompt).toLowerCase();if(t.indexOf('euler')>-1)return['Euler line ratio','The centroid, orthocenter, and circumcenter lie on the Euler line. The centroid splits the line so HG:GO = 2:1.','Use it when a problem mentions centroid, orthocenter, circumcenter, HG, GO, or HO.'];if(t.indexOf('ceva')>-1)return['Ceva theorem','Ceva is for three cevians in a triangle that meet at one point. The three side ratios multiply to 1.','Use it when lines from all three vertices are concurrent.'];if(t.indexOf('menelaus')>-1)return['Menelaus theorem','Menelaus is for one straight transversal cutting across a triangle. The three positive side-ratio factors multiply to 1 in this version.','Use it when one line passes through sides or extensions of a triangle.'];if(t.indexOf('ptolemy')>-1)return['Ptolemy theorem','In a cyclic quadrilateral, diagonal product equals the sum of products of opposite sides.','Use it when four points lie on a circle and diagonals/sides are given.'];if(t.indexOf('symmedian')>-1)return['Symmedian ratio theorem','A symmedian splits the opposite side in the ratio of the squares of the adjacent sides.','Use it when the word symmedian appears.'];if(t.indexOf('angle bisector')>-1)return['Angle Bisector Theorem','An angle bisector splits the opposite side in the ratio of the two adjacent sides.','Use it when a segment bisects an angle in a triangle.'];if(t.indexOf('chord')>-1)return['Intersecting chords theorem','When chords intersect inside a circle, the products of the two pieces are equal.','Use it when two chords cross inside a circle.'];if(t.indexOf('tangent')>-1||t.indexOf('secant')>-1||t.indexOf('power')>-1)return['Power of a point','Tangents and secants from the same point create equal length products.','Use tangent² = external × whole secant.'];return['Geometry theorem matching','Identify the structure in the diagram, choose the theorem that matches it, then substitute the numbers.','Look for keywords like circle, median, angle bisector, cyclic, tangent, similar, or right triangle.'];}
+function showSolution(){
+  if(!currentCase||!answered)return;
+  var boosts=getBoosts();
+  if(boosts.solutionGem&&!currentCase.solutionGemClaimed){
+    gems+=1;
+    currentCase.solutionGemClaimed=true;
+    saveProfile();
+    updateStats();
+  }
+  var p=document.getElementById('solutionPanel');
+  var info=tutorInfo(currentCase);
+  p.innerHTML='<strong>What theorem are we using?</strong><p><strong>'+info[0]+':</strong> '+info[1]+'</p><p><strong>When do you use it?</strong> '+info[2]+'</p><strong>Step-by-step solution:</strong><ol class="step-list">'+currentCase.steps.map(function(s,i){return'<li><strong>Step '+(i+1)+':</strong> '+s+'</li>';}).join('')+'</ol><p><strong>Final answer:</strong> '+currentCase.answer+'</p>';
+  p.classList.add('show');
+}
+
+function qTriangleMidlineRatio(){var d=R(8,18),ans=2*d;return Q('midlineRatio','Triangle Midline Ratio','Similarity + Midsegments','Hard · 3 points',3,'In triangle ABC, points D and E are the midpoints of AB and AC. If DE='+d+', find BC.',ans,[ans-4,ans-2,ans+2,ans+6],'A segment joining two side midpoints of a triangle is parallel to the third side and half as long.','Since DE is a midsegment, DE=BC/2. So BC='+ans+'.',['D and E are midpoints, so DE is a midsegment.','Midsegment theorem: DE is half of BC.','DE='+d+', so BC=2·'+d+'='+ans+'.'],svgMidline(d,'?'),'Labeled midsegment diagram; labels are placed away from the lines for clarity.')}
+function qParallelCutRatio(){var ad=R(3,10),db=R(3,12),ae=R(4,14);var ec=ae*db/ad;while(ec%1!==0){ad=R(3,10);db=R(3,12);ae=R(4,14);ec=ae*db/ad;}return Q('parallelCutRatio'+ad+'_'+db+'_'+ae,'Parallel Cut Ratio','Similarity + Proportions','Hard · 3 points',3,'In triangle ABC, segment DE is parallel to BC with D on AB and E on AC. If AD='+ad+', DB='+db+', and AE='+ae+', find EC.',ec,makeWrongNums(ec,10),'Parallel lines create similar triangles, so AD/DB = AE/EC.',''+ad+'/'+db+'='+ae+'/EC, so EC='+ec+'.',['Because DE is parallel to BC, the side pieces are proportional.','Use AD/DB=AE/EC.',''+ad+'/'+db+'='+ae+'/EC.','EC='+ec+'.'],svgParallelCut(ad,db,ae,'?'),'Labeled similarity diagram with parallel markings.');}
+function qInscribedAngleArc(){var arc=2*R(45,85);var ans=arc/2;return Q('inscribedArc','Inscribed Angle Arc','Circle Angles','Hard · 3 points',3,'An inscribed angle intercepts an arc of '+arc+'°. Find the angle measure.',ans+'°',[ans-10+'°',ans-5+'°',ans+5+'°',arc+'°'],'An inscribed angle is half its intercepted arc.','The angle is '+arc+'°/2='+ans+'°.',['Use the Inscribed Angle Theorem.','Angle measure = intercepted arc / 2.',''+arc+'°/2='+ans+'°.'],svgCircleLabeled(arc+'°','?'),'Labeled circle diagram with highlighted arc.')}
+function qCentralAngleArc(){var arc=R(40,220);return Q('centralArc'+arc,'Central Angle Arc','Circle Angles','Hard · 3 points',3,'A central angle intercepts an arc of '+arc+'°. What is the measure of the central angle?',arc+'°',[arc-10+'°',arc+10+'°',Math.round(arc/2)+'°',360-arc+'°'],'A central angle has the same measure as its intercepted arc.','The central angle is '+arc+'°.',['For a central angle, the vertex is the center of the circle.','Central angle measure equals intercepted arc measure.','So the angle is '+arc+'°.'],svgCentralAngle(arc),'Central angle circle diagram with center O.');}
+function qCircleSectorArea(){var r=R(4,12),theta=pick([30,45,60,90,120,135,150]);var ans=theta*r*r/360;return Q('sector'+r+'_'+theta,'Sector Area','Circle Area','Hard · 3 points',3,'A circle has radius '+r+'. A sector has central angle '+theta+'°. Find the sector area in terms of π.',ans+'π',makeWrongText(ans+'π',[r*r+'π',theta+'π',(ans+2)+'π',(ans*2)+'π']),'Sector area is θ/360 times the full circle area.','Area=('+theta+'/360)·π·'+r+'²='+ans+'π.',['Full circle area=πr²='+r*r+'π.','Sector fraction='+theta+'/360.','Sector area='+ans+'π.'],svgSector(r,theta),'Sector diagram with radius and central angle.');}
+function qTangentChordAngle(){var arc=2*R(30,80);var ans=arc/2;return Q('tanChordAngle','Tangent-Chord Angle','Circle Angles','Bonus · 5 points',5,'A tangent and a chord meet at point A on a circle. The intercepted arc measures '+arc+'°. Find the angle between the tangent and chord.',ans+'°',[ans-8+'°',ans+6+'°',arc+'°',180-ans+'°'],'The angle formed by a tangent and a chord equals half the intercepted arc.','Angle='+arc+'°/2='+ans+'°.',['Recognize the tangent-chord theorem.','The angle equals half the intercepted arc.',''+arc+'°/2='+ans+'°.'],svgCircleLabeled(arc+'°','?'),'Circle diagram labeled with tangent and chord.')}
+function qMidpointDistance(){var x1=R(0,6),y1=R(0,6),dx=2*R(3,8),dy=2*R(2,7);var x2=x1+dx,y2=y1+dy;var mx=x1+dx/2,my=y1+dy/2;var ans=(dx/2)*(dx/2)+(dy/2)*(dy/2);return Q('midpointDistance'+x1+'_'+y1+'_'+dx+'_'+dy,'Midpoint Distance','Coordinate Geometry','Hard · 3 points',3,'Points A('+x1+','+y1+') and B('+x2+','+y2+') have midpoint M. Find AM².',ans,makeWrongNums(ans,15),'The midpoint is halfway between A and B, so AM uses half the horizontal and vertical changes.','M=('+mx+','+my+'), so AM²='+(dx/2)+'²+'+(dy/2)+'²='+ans+'.',['Find midpoint M=(('+x1+'+'+x2+')/2,('+y1+'+'+y2+')/2)=('+mx+','+my+').','From A to M, the changes are '+(dx/2)+' and '+(dy/2)+'.','AM²='+(dx/2)+'²+'+(dy/2)+'²='+ans+'.'],svgMidpointOnly(x1,y1,x2,y2),'Coordinate diagram showing only the given points A and B with midpoint M marked, not solved.');}
+function qCoordinateRectangleArea(){var x=R(0,4),y=R(0,4),w=R(5,14),h=R(4,12),ans=w*h;return Q('coordRect'+w+'_'+h,'Coordinate Rectangle Area','Coordinate Geometry','Hard · 3 points',3,'Rectangle ABCD has A('+x+','+y+'), B('+(x+w)+','+y+'), C('+(x+w)+','+(y+h)+'), and D('+x+','+(y+h)+'). Find its area.',ans,makeWrongNums(ans,20),'Horizontal and vertical side lengths can be read from the coordinates.','AB='+w+' and AD='+h+', so area='+w+'·'+h+'='+ans+'.',['AB runs from x='+x+' to x='+(x+w)+', so AB='+w+'.','AD runs from y='+y+' to y='+(y+h)+', so AD='+h+'.','Area='+w+'·'+h+'='+ans+'.'],svgCoordRectangle(x,y,w,h),'Coordinate rectangle diagram drawn as an actual rectangle.');}
+function qShadedRectangle(){var W=R(9,18),H=R(7,15),a=R(3,Math.min(8,W-1)),b=R(3,Math.min(8,H-1));var ans=W*H-a*b/2;return Q('shadedRect'+W+'_'+H+'_'+a+'_'+b,'Shaded Rectangle Triangle','Area Geometry','Hard · 3 points',3,'A '+W+' by '+H+' rectangle has a right triangle cut from one corner with legs '+a+' and '+b+'. Find the remaining area.',ans,makeWrongNums(ans,20),'Subtract the triangle area from the rectangle area.','Rectangle area='+W+'·'+H+'='+(W*H)+'. Triangle area='+a+'·'+b+'/2='+(a*b/2)+'. Remaining area='+ans+'.',['Rectangle area='+W+'·'+H+'='+(W*H)+'.','Cut-out triangle area='+a+'·'+b+'/2='+(a*b/2)+'.','Remaining area='+(W*H)+'−'+(a*b/2)+'='+ans+'.'],svgShadedRect(W,H,a,b),'Labeled shaded-area rectangle with the cut-out legs shown.');}
+function qParallelogramTriangleArea(){var base=R(10,24),height=R(5,14),ans=base*height/2;return Q('paraTriArea'+base+'_'+height,'Parallelogram Diagonal Area','Area Geometry','Hard · 3 points',3,'A parallelogram has base '+base+' and height '+height+'. A diagonal divides it into two congruent triangles. Find the area of one triangle.',ans,makeWrongNums(ans,20),'A diagonal divides a parallelogram into two equal-area triangles.','Parallelogram area='+base+'·'+height+'='+(base*height)+', so one triangle has area '+ans+'.',['Parallelogram area=base·height='+base+'·'+height+'='+(base*height)+'.','A diagonal splits it into two congruent triangles.','One triangle area='+(base*height)+'/2='+ans+'.'],svgPara(base,height,true),'Parallelogram diagram with diagonal and perpendicular height.');}
+function qThirtySixtyNinety(){var s=R(5,12),ans=2*s;return Q('thirtySixty','30-60-90 Triangle','Right Triangles','Hard · 3 points',3,'A 30-60-90 triangle has short leg '+s+'. Find the hypotenuse.',ans,[s,ans+2,ans+4,ans*2],'In a 30-60-90 triangle, the hypotenuse is twice the short leg.','Hypotenuse=2·'+s+'='+ans+'.',['Recognize the 30-60-90 side ratio: short leg : long leg : hypotenuse = 1 : √3 : 2.','Short leg='+s+', so hypotenuse=2·'+s+'='+ans+'.'],svgRightLabeled(s,'?','30°','60°'),'Special right triangle diagram labeled by angles.')}
+function qPythagoreanMissingLeg(){var triples=[[7,24,25],[9,12,15],[8,15,17],[5,12,13]];var t=pick(triples),leg=t[0],ans=t[1],hyp=t[2];return Q('missingLeg','Missing Leg','Right Triangles','Hard · 3 points',3,'A right triangle has hypotenuse '+hyp+' and one leg '+leg+'. Find the other leg.',ans,[ans-2,ans+2,ans+4,leg],'Use a²+b²=c² and solve for the missing leg.','Missing leg²='+hyp+'²−'+leg+'², so the leg is '+ans+'.',['Use the Pythagorean Theorem.','x²+'+leg+'²='+hyp+'².','x²='+(hyp*hyp)+'−'+(leg*leg)+'='+(ans*ans)+'.','x='+ans+'.'],svgMissingLeg(leg,hyp),'Right triangle drawn with the given leg, hypotenuse, and unknown leg.');}
+
+function qSimilarityAA(){var scale=pick([2,3,4]),small=R(5,12),large=small*scale,side=R(6,14),ans=side*scale;return Q('simAA','Triangle Scale Case','Similarity','Hard · 3 points',3,'Triangles ABC and DEF are similar by AA. If AB='+small+', DE='+large+', and BC='+side+', find EF.',ans,[ans-scale,ans+scale,ans+2*scale,side+scale],'AA proves similarity, then corresponding sides have the same scale factor.','Scale factor is '+large+'/'+small+'='+scale+', so EF='+side+'·'+scale+'='+ans+'.',['AA gives triangle similarity.','Scale factor from ABC to DEF is DE/AB='+large+'/'+small+'='+scale+'.','BC corresponds to EF.','EF='+side+'·'+scale+'='+ans+'.'],svgCongruence('',small,side,'',large,'?','',50,70),'Similarity scale problem.');}
+function qSimilaritySAS(){var s1=R(4,9),s2=R(6,12),k=pick([2,3]);var ans=s2*k;return Q('simSAS','Proportional Triangle Case','Similarity','Bonus · 5 points',5,'Two triangles have included angle 60°. Around that angle, the first triangle has sides '+s1+' and '+s2+', and the second has corresponding side '+(s1*k)+' and unknown side x. Find x.',ans,[ans-k,ans+k,ans+2*k,s2+k],'SAS similarity uses proportional sides around an included equal angle.','Scale factor is '+(s1*k)+'/'+s1+'='+k+', so x='+s2+'·'+k+'='+ans+'.',['The included angles are equal: 60°.','The corresponding side ratio is '+(s1*k)+'/'+s1+'='+k+'.','The other corresponding side is x='+s2+'·'+k+'='+ans+'.'],svgCongruence('',s1,s2,'',s1*k,'?','',60,''),'SAS similarity problem.');}
+function qSimilarScale(){var a=R(5,12),k=pick([2,3,4]),b=R(7,15),ans=b*k;return Q('simScale','Similar Triangle Scale','Similarity','Hard · 3 points',3,'△ABC ∼ △DEF. AB='+a+', DE='+(a*k)+', and BC='+b+'. Find EF.',ans,[ans+k,ans-k,ans+2*k,ans+5],'Use the scale factor DE/AB.','Scale factor is '+k+', so EF='+ans+'.',['DE/AB='+(a*k)+'/'+a+'='+k+'.','EF corresponds to BC, so EF='+k+'·'+b+'.','EF='+ans+'.'],svgSimilarTriangles(a,b,a*k,'?'),'Two similar triangles ABC and DEF with EF unknown.');}
+function qSimilarPerimeter(){var p=R(18,55),k=pick([2,3,4,5]);var ans=p*k;return Q('simPerim'+p+'_'+k,'Similar Perimeter Scale','Similarity','Hard · 3 points',3,'A polygon has perimeter '+p+'. A similar polygon has side lengths '+k+' times as large. Find the new perimeter.',ans,makeWrongNums(ans,20),'Perimeter scales by the same factor as side length.','New perimeter='+p+'·'+k+'='+ans+'.',['Side lengths are multiplied by '+k+'.','Perimeter is also multiplied by '+k+'.','New perimeter='+ans+'.'],svgNested(),'Similarity perimeter diagram.');}
+function qSimilarityMissingSide(){var a=R(4,12),b=R(5,14),k=R(2,5),given=a*k,ans=b*k;return Q('simMissing'+a+'_'+b+'_'+k,'Similar Missing Side','Similarity','Hard · 3 points',3,'Two similar triangles have corresponding sides '+a+' and '+given+'. Another side of the smaller triangle is '+b+'. Find the corresponding side of the larger triangle.',ans,makeWrongNums(ans,12),'Find the scale factor, then multiply the matching side.','Scale factor='+given+'/'+a+'='+k+', so the missing side is '+b+'·'+k+'='+ans+'.',['Scale factor='+given+'/'+a+'='+k+'.','Corresponding larger side='+b+'·'+k+'.','Answer='+ans+'.'],svgSimilarTriangles(a,b,given,'?'),'Two similar triangles with the requested larger side marked as unknown.');}
+function qAreaScale(){var A=pick([18,24,32,45,50,72]),k=pick([2,3,4]),ans=A*k*k;return Q('areaScale','Similar Area Scale','Similarity + Area','Hard · 3 points',3,'A triangle has area '+A+'. A similar triangle has side lengths '+k+' times as large. Find the larger area.',ans,[A*k,A+k*k,ans-k*k,ans+k*k],'Area scales by k², not k.','Area scale factor is '+(k*k)+'; larger area='+ans+'.',['Length factor='+k+'.','Area factor='+k+'²='+(k*k)+'.','Area='+A+'·'+(k*k)+'='+ans+'.'],svgNested(),'Area ratio problem.');}
+function qAngleBisectorArea(){var m=R(2,8),n=R(3,10);while(m===n)n=R(3,10);var total=(m+n)*R(6,15),ans=total*m/(m+n);return Q('abArea'+m+'_'+n+'_'+total,'Angle Bisector Area','Angle Bisector Theorem','Bonus · 5 points',5,'In △ABC, AD bisects ∠A and meets BC at D. If AB:AC='+m+':'+n+' and the area of △ABC is '+total+', find the area of △ABD.',ans,makeWrongNums(ans,15),'Angle bisector gives BD:DC=AB:AC, and the two smaller triangles share the same altitude.','BD:DC='+m+':'+n+', so [ABD]='+m+'/('+(m+n)+')·'+total+'='+ans+'.',['By the Angle Bisector Theorem, BD:DC=AB:AC='+m+':'+n+'.','Triangles ABD and ADC share the same altitude to BC.','Their areas have the same ratio '+m+':'+n+'.','[ABD]='+m+'/('+(m+n)+')·'+total+'='+ans+'.'],svgBisector(m,n,total,'?'),'Angle bisector and area ratio diagram.');}
+function qCeva(){var p=R(2,7),q=R(3,9),r=R(2,8),s=R(3,10);var num=q*s,den=p*r;var g=gcd(num,den);var ans=(num/g)+'/'+(den/g);return Q('ceva'+p+'_'+q+'_'+r+'_'+s,'Ceva Ratio Case','Ceva theorem','Bonus · 5 points',5,'In △ABC, D is on BC, E is on CA, and F is on AB. If BD/DC='+p+'/'+q+' and CE/EA='+r+'/'+s+', what must AF/FB be so AD, BE, and CF meet at one point?',ans,makeWrongText(ans,[den/g+'/'+num/g,p+'/'+s,r+'/'+q,(p*r)+'/'+(q*s)]),'Use Ceva: the product of the three side ratios must be 1.','('+p+'/'+q+')('+r+'/'+s+')(AF/FB)=1, so AF/FB='+ans+'.',['Ceva says (BD/DC)(CE/EA)(AF/FB)=1.','Substitute: ('+p+'/'+q+')('+r+'/'+s+')(AF/FB)=1.','So AF/FB=1 ÷ ('+(p*r)+'/'+(q*s)+') = '+ans+'.'],svgCeva(p,q,r,s,'?'),'Ceva diagram with three concurrent cevians and only the unknown ratio marked as ?.');}
+function qMenelaus(){var p=R(2,7),q=R(3,10),r=R(2,8),s=R(3,11);var num=q*s,den=p*r;var g=gcd(num,den);var ans=(num/g)+'/'+(den/g);return Q('menelaus'+p+'_'+q+'_'+r+'_'+s,'Transversal Ratio Case','Menelaus theorem','Bonus · 5 points',5,'In triangle ABC, a straight transversal crosses the sides or their extensions at D, E, and F. Using positive ratios, BD/DC='+p+'/'+q+' and CE/EA='+r+'/'+s+'. Find AF/FB.',ans,makeWrongText(ans,[den/g+'/'+num/g,p+'/'+s,r+'/'+q,(p*r)+'/'+(q*s)]),'Use Menelaus: the three positive ratio factors multiply to 1.','('+p+'/'+q+')('+r+'/'+s+')(AF/FB)=1, so AF/FB='+ans+'.',['Menelaus gives (BD/DC)(CE/EA)(AF/FB)=1.','Substitute: ('+p+'/'+q+')('+r+'/'+s+')(AF/FB)=1.','So AF/FB='+ans+'.'],svgMenelaus(p,q,r,s,'?'),'Menelaus diagram with one straight transversal crossing the triangle.');}
+function qSymmedian(){var m=R(3,7),n=R(4,9);if(m===n)n++;var total=(m*m+n*n)*R(2,5);var ans=total*m*m/(m*m+n*n);return Q('symmedian'+m+'_'+n+'_'+total,'Symmedian Ratio','Advanced triangle ratio','Bonus · 5 points',5,'A symmedian from A meets BC at K. If AB='+m+', AC='+n+', and BC='+total+', find BK.',ans,makeWrongNums(ans,12),'A symmedian splits the opposite side in the ratio of the squares of the adjacent sides.','BK:KC='+m+'²:'+n+'²='+(m*m)+':'+(n*n)+', so BK='+ans+'.',['Use BK:KC=AB²:AC².','BK:KC='+(m*m)+':'+(n*n)+'.','BK='+m*m+'/'+(m*m+n*n)+'·'+total+'='+ans+'.'],svgSymmedian(m,n,total),'Symmedian diagram showing K on BC with BK unknown.');}
+function qIntersectChords(){var be=R(4,12),ed=R(5,16),prod=be*ed;var divs=[];for(var i=2;i<=prod;i++){if(prod%i===0)divs.push(i);}var ae=pick(divs.filter(function(v){return v>=4&&v<=14;}).length?divs.filter(function(v){return v>=4&&v<=14;}):divs);var ec=prod/ae;return Q('chords','Intersecting Chords','Circle power','Bonus · 5 points',5,'Two chords intersect at E. If AE='+ae+', EC='+ec+', and BE='+be+', find ED.',ed,[ed+2,Math.max(1,ed-2),ed+4,ed+6],'Products of chord segments are equal.','AE·EC=BE·ED, so ED='+ed+'.',[ae+'·'+ec+'='+be+'·ED.',String(ae*ec)+'='+be+'ED.','ED='+ed+'.'],svgIntersectChords(ae,ec,be,'?'),'Circle product theorem.');}
+function qTangentSecant(){var pa=R(2,8),ab=R(5,22),whole=pa+ab,sq=pa*whole;var tries=0;while(!Number.isInteger(Math.sqrt(sq))&&tries<80){pa=R(2,8);ab=R(5,22);whole=pa+ab;sq=pa*whole;tries++;}if(!Number.isInteger(Math.sqrt(sq))){pa=4;ab=21;whole=25;sq=100;}var pt=Math.sqrt(sq);return Q('tansec'+pt+'_'+pa,'Tangent-Secant Power','Circle power','Bonus · 5 points',5,'From point P, PT is tangent to a circle and PAB is a secant. If PA='+pa+' and AB='+ab+', find PT.',pt,makeWrongNums(pt,8),'Tangent squared equals external segment times whole secant.','PB='+whole+', so PT²='+pa+'·'+whole+'='+pt*pt+', and PT='+pt+'.',['Find the whole secant: PB=PA+AB='+pa+'+'+ab+'='+whole+'.','Use PT²=PA·PB.','PT²='+pa+'·'+whole+'='+(pt*pt)+'.','PT='+pt+'.'],svgTangentSecant(pa,ab,'?'),'Tangent and secant diagram.');}
+function qCyclicPtolemy(){var a=R(4,12),b=R(5,14);var ans=a*a+b*b;return Q('ptolemy'+a+'_'+b,'Ptolemy Cyclic Quad','Cyclic quadrilateral','Bonus · 5 points',5,'A rectangle has side lengths '+a+' and '+b+'. Since every rectangle is cyclic, use Ptolemy to find the product of its diagonals.',ans,makeWrongNums(ans,20),'Ptolemy says diagonal product equals the sum of products of opposite sides.','Diagonal product='+a+'·'+a+'+'+b+'·'+b+'='+ans+'.',['A rectangle is cyclic.','Ptolemy gives diagonal product = '+a+'·'+a+' + '+b+'·'+b+'.','That equals '+ans+'.'],svgRectangleCyclic(a,b),'Cyclic rectangle diagram drawn as a rectangle with equal diagonals.');}
+function qSecantQuadratic(){var x=pick([4,5,6,8]),inside=pick([12,14,20,22]);var pow=x*(x+inside);return Q('secquad','Secant Quadratic','Circle power + algebra','Bonus · 5 points',5,'A point P has power '+pow+'. A secant through P has external segment x and internal segment '+inside+'. Find positive x.',x,[x+1,x+2,Math.max(1,x-1),x+4],'External times whole equals power.','x(x+'+inside+')='+pow+', so x='+x+'.',['x(x+'+inside+')='+pow+'.','Test/solve the quadratic for positive x.','x='+x+'.'],svgSecantQuadratic('x',inside,pow),'Quadratic circle power problem.');}
+function qTangentRadiusArea(){var r=pick([6,8,10,12]),t=pick([14,18,20,24]);var ans=r*t/2;return Q('tanarea','Tangent Radius Area','Tangent + area','Hard · 3 points',3,'A radius OT='+r+' is perpendicular to tangent PT='+t+'. Find the area of △OPT.',ans,[ans-10,ans+10,ans+20,ans*2],'Radius to tangent is perpendicular, so use triangle area.','Area='+r+'·'+t+'/2='+ans+'.',['Base='+t+', height='+r+'.','Area='+t+'·'+r+'/2='+ans+'.'],svgTangentRadius(r,t),'Tangent geometry area.');}
+function qBrokenChord(){
+  var x=R(6,15);
+  var add=pick([5,7,9]);
+  var product=x*(x+add);
+  var divisors=[];
+  for(var d=2;d<=product;d++) if(product%d===0) divisors.push(d);
+  var good=divisors.filter(function(v){return v>=6&&v<=30;});
+  var a=pick(good.length?good:divisors);
+  var b=product/a;
+  return Q('brokenChord','Intersecting Chords Case','Circle geometry','Bonus · 5 points',5,
+    'Two chords intersect. One is split into x and x+'+add+'; the other into '+a+' and '+b+'. Find x.',
+    x,[Math.max(1,x-2),Math.max(1,x-1),x+2,x+3],
+    'Use intersecting chord products.',
+    'x(x+'+add+')='+a+'·'+b+', so x='+x+'.',
+    ['x(x+'+add+')='+a+'·'+b+'.','x(x+'+add+')='+product+'.','The positive solution is x='+x+'.'],
+    svgIntersectChords('x','x+'+add,a,b),'Correctly constructed chord product diagram.');
+}
+function qEqualPowers(){var tan=pick([12,15,18]),ext=pick([6,9]);var ans=tan*tan/ext;if(ans%1!==0){tan=18;ext=9;ans=36;}return Q('equalPower','Equal Powers','Power of a point','Bonus · 5 points',5,'From the same external point P, a tangent has length '+tan+'. A secant has external segment '+ext+' and whole segment x. Find x.',ans,[ans-4,ans+4,ans+8,ext+tan],'Equal powers mean tangent power equals secant power.',''+tan+'²='+ext+'x, so x='+ans+'.',[tan+'²='+(tan*tan)+'.',ext+'x='+(tan*tan)+'.','x='+ans+'.'],svgEqualPowers(tan,ext,'x'),'Power equality diagram.');}
+function qEulerLine(){var go=R(4,18),ans=2*go;return Q('eulerLine'+go,'Euler Line Ratio','Triangle centers','Bonus · 5 points',5,'On the Euler line of a triangle, the centroid G lies between the orthocenter H and circumcenter O. If GO='+go+', find HG.',ans,makeWrongNums(ans,12),'On the Euler line, the centroid divides HO so that HG:GO=2:1.','HG=2·GO='+ans+'.',['Euler line fact: H, G, and O are collinear.','The centroid G divides HO in the ratio HG:GO=2:1.','GO='+go+', so HG=2·'+go+'='+ans+'.'],svgEuler(go),'Euler line diagram with H, G, and O collinear.');}
+function qMedianLength(){var cases=[{b:13,a:14,c:15,ans:'2√37',m2:148},{b:5,a:6,c:7,ans:'√34',m2:34},{b:8,a:9,c:13,ans:'√411/2',m2:102.75},{b:7,a:10,c:11,ans:'√78',m2:78}];var t=pick(cases);return Q('medianLength'+t.a+'_'+t.b+'_'+t.c,'Median Length','Triangle median','Bonus · 5 points',5,'In triangle ABC, the side lengths are '+t.b+', '+t.a+', and '+t.c+'. Find the median to the side of length '+t.a+'.',t.ans,makeWrongText(t.ans,['12','13','14','√170','2√35','√'+Math.round(t.m2)]),'Use Apollonius median formula.','The median length comes from m²=(2b²+2c²−a²)/4.',['Let a='+t.a+' be the side being bisected.','m²=(2·'+t.b+'²+2·'+t.c+'²−'+t.a+'²)/4.','m²='+t.m2+'.','So the median is '+t.ans+'.'],svgMedianTriangle(t.b,t.c,t.a),'Median diagram drawn to the generated side lengths, with the median marked unknown.');}
+function qAltitudeHypotenuse(){var a=R(3,12),b=R(4,13);var h2=a*b;var ans=Number.isInteger(Math.sqrt(h2))?String(Math.sqrt(h2)):'√'+h2;return Q('altHyp'+a+'_'+b,'Altitude to Hypotenuse','Right triangle','Hard · 3 points',3,'In a right triangle, the altitude to the hypotenuse splits the hypotenuse into segments '+a+' and '+b+'. Find the altitude.',ans,makeWrongText(ans,[String(a+b),String(Math.abs(a-b)),String(a*b),'√'+(h2+1)]),'Altitude squared equals the product of the two hypotenuse segments.','h²='+a+'·'+b+'='+h2+', so h='+ans+'.',['Use the altitude-to-hypotenuse theorem.','h²='+a+'·'+b+'='+h2+'.','h='+ans+'.'],svgAltitudeHypotenuse(a,b),'Right triangle altitude diagram with altitude marked as unknown.');}
+function qScaledTriple(){var k=R(2,5);return Q('triple','Scaled Right Triangle','Right triangle','Hard · 3 points',3,'A right triangle is similar to a 3-4-5 triangle and has short leg '+(3*k)+'. Find the hypotenuse.',5*k,[4*k,5*k+1,6*k,3*k+5],'Scale the 3-4-5 triangle.','Scale factor is '+k+', so hypotenuse is '+(5*k)+'.',['Short leg 3 becomes '+(3*k)+'.','Scale factor is '+k+'.','Hypotenuse 5 becomes '+(5*k)+'.'],svgScaledTriple(3*k),'Scaled right triangle with only the given short leg shown.');}
+function qSemicircleChord(){var chord=pick([10,12,16,18]),h=pick([5,6,8]);var half=chord/2;var ans=half*half+h*h;return Q('semichord','Semicircle Chord','Circle + right triangle','Bonus · 5 points',5,'A chord of length '+chord+' is parallel to a semicircle diameter and '+h+' units above it. Find R².',ans,[ans-10,ans+10,ans+20,ans-5],'Perpendicular from center to chord bisects it.','Half chord='+half+', height='+h+', so R²='+ans+'.',['Half chord='+chord+'/2='+half+'.','R²='+half+'²+'+h+'²='+ans+'.'],svgSemicircleChord(chord,h,'R²?'),'Semicircle chord diagram.');}
+function qRightRatio(){var triples=[[5,12,13],[7,24,25],[8,15,17],[9,40,41]],t=pick(triples),k=R(2,5),hyp=t[2]*k,ans=t[0]*k;return Q('rightRatio'+t[0]+'_'+k,'Right Triangle Ratio','Right triangle','Hard · 3 points',3,'A right triangle has legs in ratio '+t[0]+':'+t[1]+' and hypotenuse '+hyp+'. Find the shorter leg.',ans,makeWrongNums(ans,12),'Scale the matching Pythagorean triple.','The ratio matches '+t[0]+'-'+t[1]+'-'+t[2]+'. Since '+t[2]+'k='+hyp+', k='+k+', so the shorter leg is '+ans+'.',['Recognize the triple '+t[0]+'-'+t[1]+'-'+t[2]+'.','The hypotenuse scale factor is '+hyp+'/'+t[2]+'='+k+'.','Shorter leg='+t[0]+'·'+k+'='+ans+'.'],svgRightRatio(t[0],t[1],hyp),'Right triangle ratio diagram with ratio and hypotenuse only.');}
+function qShoelaceParam(){var bx=R(8,18),by=R(1,6),cy=R(10,22),k=R(2,10);var area=Math.abs(bx*cy-by*k)/2;while(area%1!==0){bx=R(8,18);by=R(1,6);cy=R(10,22);k=R(2,10);area=Math.abs(bx*cy-by*k)/2;}return Q('shoelace'+bx+'_'+by+'_'+cy+'_'+k,'Coordinate Triangle Area','Coordinate geometry','Bonus · 5 points',5,'Triangle ABC has A(0,0), B('+bx+','+by+'), and C(k,'+cy+'). If its area is '+area+', find the smaller possible value of k.',k,makeWrongNums(k,8),'Use the shoelace formula with the coordinates in order.','Area=|'+(bx*cy)+'−'+by+'k|/2. The smaller value is k='+k+'.',['Use area = |x₁y₂+x₂y₃+x₃y₁−y₁x₂−y₂x₃−y₃x₁|/2.','With A(0,0), this becomes |'+bx+'·'+cy+'−'+by+'k|/2='+area+'.','Solve the absolute-value equation and take the smaller diagram value.','k='+k+'.'],svgCoord('A(0,0)','B('+bx+','+by+')','C(k,'+cy+')','area='+area),'Coordinate triangle diagram.');}
+function qDistanceSquared(){var dx=R(5,12),dy=R(4,10),ans=dx*dx+dy*dy;return Q('distSq','Distance Squared','Coordinate geometry','Hard · 3 points',3,'Two points differ by '+dx+' horizontally and '+dy+' vertically. Find the square of the distance between them.',ans,[ans-5,ans+5,ans+10,dx+dy],'Use the distance formula without taking the square root.','d²='+dx+'²+'+dy+'²='+ans+'.',['Horizontal change='+dx+'.','Vertical change='+dy+'.','d²='+ans+'.'],svgRight(dy,dx,'?',''),'Distance formula diagram.');}
+function qCoordinateArea(){var a=R(6,14),b=R(5,12),ans=a*b/2;return Q('coordArea','Coordinate Triangle Area','Coordinate geometry','Hard · 3 points',3,'A right triangle on the coordinate plane has legs '+a+' and '+b+'. Find its area.',ans,[ans+2,ans+4,ans*2,a+b],'Area is half base times height.','Area='+a+'·'+b+'/2='+ans+'.',['Base='+a+'.','Height='+b+'.','Area='+ans+'.'],svgCoordRight(a,b),'Coordinate right triangle diagram with horizontal base and vertical height.');}
+function qSlopeParallel(){var rise=3*R(3,8),run=4*rise/3;return Q('slopeParallel'+rise,'Parallel Slope','Coordinate geometry','Hard · 3 points',3,'A line has slope 3/4. A parallel line rises '+rise+'. What is its run?',run,makeWrongNums(run,10),'Parallel lines have equal slopes.',''+rise+'/run=3/4, so run='+run+'.',['Set '+rise+'/run=3/4.','3run='+rise*4+'.','run='+run+'.'],svgSlope(rise,'?'),'Coordinate slope diagram showing the given rise and unknown run.');}
+function qMedialArea(){var small=R(10,45),ans=small*4;return Q('medial'+small,'Medial Triangle Area','Area geometry','Hard · 3 points',3,'The medial triangle of a triangle has area '+small+'. Find the original triangle area.',ans,makeWrongNums(ans,25),'The medial triangle has 1/4 of the original area.','Original area=4·'+small+'='+ans+'.',['The side scale factor from the original triangle to its medial triangle is 1/2.','Area scale factor is (1/2)²=1/4.','Original area='+small+'·4='+ans+'.'],svgNested(),'Medial triangle diagram.');}
+function qMedianArea(){var area=2*R(25,90),ans=area/2;return Q('medianArea'+area,'Median Area Split','Area theorem','Hard · 3 points',3,'A median divides a triangle with area '+area+' into two smaller triangles. What is the area of one smaller triangle?',ans,makeWrongNums(ans,12),'A median divides a triangle into two equal-area triangles.','Each area is '+area+'/2='+ans+'.',['A median splits the opposite side into two equal lengths.','The two smaller triangles share the same height.','So their areas are equal: '+area+'/2='+ans+'.'],svgMedianArea(area),'Median area diagram with the median drawn to the midpoint.');}
+function qTrapezoid(){var a=pick([10,12,14,16]),b=a+pick([8,10,12,14]);var ans=(a+b)/2;return Q('trap','Trapezoid Midsegment','Quadrilateral theorem','Hard · 3 points',3,'A trapezoid has bases '+a+' and '+b+'. Find its midsegment.',ans,[ans-3,ans-1,ans+2,a+b],'Midsegment is average of bases.','('+a+'+'+b+')/2='+ans+'.',['Add the bases: '+a+'+'+b+'='+(a+b)+'.','Divide by 2: '+ans+'.'],svgTrapezoid(a,b,'?'),'Trapezoid diagram with parallel bases and unknown midsegment.');}
+function qViviani(){var h=R(10,30);return Q('viviani'+h,'Equilateral Distance Sum','Area geometry','Bonus · 5 points',5,'In an equilateral triangle with altitude '+h+', a point inside has perpendicular distances to the three sides. What is the sum of those three distances?',h,makeWrongNums(h,10),'Viviani theorem says the sum is the altitude.','The sum is '+h+'.',['For any point inside an equilateral triangle, the distances to the three sides sum to the altitude.','The altitude is '+h+'.','So the distance sum is '+h+'.'],svgViviani(h),'Equilateral triangle diagram with three perpendicular distances.');}
+function qIncenterAngle(){var a=pick([50,60,70,80]);var ans=90+a/2;return Q('incenter','Incenter Angle','Triangle centers','Bonus · 5 points',5,'In △ABC, ∠A='+a+'°. If I is the incenter, find ∠BIC.',ans+'°',[ans-10+'°',ans-5+'°',ans+5+'°',ans+10+'°'],'∠BIC=90°+A/2.','∠BIC='+ans+'°.',['Use ∠BIC=90°+∠A/2.','∠A/2='+(a/2)+'°.','Answer='+ans+'°.'],svgIncenter(a,'?'),'Incenter diagram with I shown and angle BIC marked unknown.');}
+function qCentroidRatio(){var med=3*R(5,14),ans=2*med/3;return Q('centroid'+med,'Centroid Ratio','Triangle centers','Hard · 3 points',3,'A median has length '+med+'. The centroid divides it in a 2:1 ratio from the vertex. Find the longer piece.',ans,makeWrongNums(ans,10),'The centroid is 2/3 of the way from the vertex to the midpoint.','Longer piece=2/3·'+med+'='+ans+'.',['The centroid ratio is 2:1 from the vertex.','Total parts=3.','The longer piece is 2 parts: 2/3·'+med+'='+ans+'.'],svgCentroid(med),'Centroid diagram with median, centroid, and longer segment unknown.');}
+function qCyclicAngle(){var a=pick([96,100,104,112,118]);var c=180-a;return Q('cyclicAngle','Cyclic Quadrilateral Angle','Circle angles','Hard · 3 points',3,'In cyclic quadrilateral ABCD, ∠A='+a+'°. Find ∠C.',c+'°',[c-2+'°',c+4+'°',a+'°','90°'],'Opposite angles in cyclic quadrilateral are supplementary.','∠C=180−'+a+'='+c+'°.',['Opposite angles add to 180°.','∠C='+c+'°.'],svgCyclicAngle(a,'?'),'Cyclic quadrilateral diagram with A and C opposite on the circle.');}
+function qPolygonInterior(){var n=R(6,12);var ans=(n-2)*180;return Q('polyInt','Polygon Interior Sum','Angles','Hard · 3 points',3,'Find the sum of interior angles of a '+n+'-gon.',ans,[ans-180,ans+180,ans/2,180*n],'Interior angle sum is (n−2)180.','(' + n + '−2)180='+ans+'.',['Use (n−2)180.','Substitute n='+n+'.','Answer='+ans+'.'],svgPoly(n),'Polygon angle diagram with the correct number of sides labeled.');}
+function qParallelAlgebra(){var known=pick([100,110,120,130]);var add=pick([10,20,30]);var x=(180-known-add)/2;if(x<=0||x%1!==0){known=110;add=20;x=25;}return Q('parallelAlg','Parallel Line Algebra','Angle chase','Hard · 3 points',3,'Two same-side interior angles are 2x+'+add+' and '+known+'°. Find x.',x,[x+5,x-5,x+10,x+15],'Same-side interior angles are supplementary.','2x+'+add+'+'+known+'=180, so x='+x+'.',['Set angles to add to 180.','2x+'+add+'+'+known+'=180.','x='+x+'.'],svgParallel(known+'°','2x+'+add+'°'),'Parallel lines diagram.');}
+function qAltInterior(){var a=pick([45,55,65,75,85,105,115]);return Q('altInterior'+a,'Alternate Interior Angles','Angle chase','Hard · 3 points',3,'Two parallel lines are cut by a transversal. One alternate interior angle is '+a+'°. Find the other alternate interior angle.',a+'°',[a-10+'°',a+10+'°',180-a+'°','90°'],'Alternate interior angles are congruent.','The other angle is '+a+'°.',['Parallel lines give equal alternate interior angles.','So the matching angle is '+a+'°.'],svgParallelAltInterior(a+'°','?'),'Parallel-line diagram showing alternate interior angles.');}
+function qCorrespondingAngles(){var a=pick([40,50,60,70,80,100,110,120]);return Q('corresponding'+a,'Corresponding Angles','Angle chase','Hard · 3 points',3,'Two parallel lines are cut by a transversal. One corresponding angle is '+a+'°. Find the matching corresponding angle.',a+'°',[a-10+'°',a+10+'°',180-a+'°','90°'],'Corresponding angles are congruent when lines are parallel.','The matching angle is '+a+'°.',['Parallel lines give equal corresponding angles.','So the angle is '+a+'°.'],svgParallelCorresponding(a+'°','?'),'Parallel-line diagram showing corresponding angles.');}
+function qExteriorAlgebra(){
+  var ext=R(70,140);
+  var r1=R(25,Math.min(85,ext-15));
+  var r2=ext-r1;
+  return Q('extAngle_'+ext+'_'+r1,'Exterior Angle','Angles','Hard · 3 points',3,
+    'In triangle ABC, an exterior angle at C is '+ext+'°. One remote interior angle is '+r1+'°. Find the other remote interior angle.',
+    r2+'°',
+    [Math.max(1,r2-5)+'°',r2+5+'°',ext+'°',r1+'°'],
+    'Exterior angle equals the sum of the two remote interior angles.',
+    ext+'='+r1+'+x, so x='+r2+'°.',
+    ['Use the exterior angle theorem.','Exterior angle = remote angle 1 + remote angle 2.',''+ext+'='+r1+'+x.','x='+r2+'°.'],
+    svgExterior(ext,r1,r2),
+    'Exterior angle diagram with the exterior angle outside the triangle.'
+  );
+}
+function qTriangleAngleSum(){
+  var a=R(35,85),b=R(35,85);
+  while(a+b>=150){a=R(35,85);b=R(35,85);}
+  var ans=180-a-b;
+  return Q('triAngle_'+a+'_'+b,'Triangle Angle Sum','Angles','Hard · 3 points',3,
+    'In triangle ABC, ∠A='+a+'° and ∠B='+b+'°. Find ∠C.',
+    ans+'°',[ans-5+'°',ans+5+'°',180-a+'°',180-b+'°'],
+    'The angles in a triangle add to 180°.',
+    '∠C=180−'+a+'−'+b+'='+ans+'°.',
+    ['Triangle angles sum to 180°.','∠C=180°−'+a+'°−'+b+'°.','∠C='+ans+'°.'],
+    svgTri('A','B','C','','','',a+'°',b+'°','?'),
+    'Triangle angle diagram.'
+  );
+}
+function qIsoscelesBaseAngle(){var vertex=R(30,120);if((180-vertex)%2!==0)vertex++;var ans=(180-vertex)/2;return Q('isoAngle'+vertex,'Isosceles Base Angle','Angles','Hard · 3 points',3,'An isosceles triangle has vertex angle '+vertex+'°. Find each base angle.',ans+'°',[ans-5+'°',ans+5+'°',vertex/2+'°',180-vertex+'°'],'The two base angles of an isosceles triangle are equal.','Each base angle=(180−'+vertex+')/2='+ans+'°.',['Triangle angle sum is 180°.','The two base angles are equal.','Each base angle=(180−'+vertex+')/2='+ans+'°.'],svgTri('A','B','C','s','s','',vertex+'°','?','?'),'Isosceles angle diagram.');}
+function qRectGridCount(){var m=R(3,7),n=R(3,7);var ans=m*(m+1)*n*(n+1)/4;return Q('rectGrid'+m+'_'+n,'Grid Rectangles','Counting geometry','Hard · 3 points',3,'How many axis-aligned rectangles are in a '+m+' by '+n+' grid?',ans,makeWrongNums(ans,25),'Choose 2 vertical grid lines and 2 horizontal grid lines.','There are C('+(m+1)+',2)·C('+(n+1)+',2)='+ans+' rectangles.',['A '+m+' by '+n+' grid has '+(m+1)+' vertical grid lines and '+(n+1)+' horizontal grid lines.','Choose 2 vertical lines and 2 horizontal lines.','C('+(m+1)+',2)·C('+(n+1)+',2)='+ans+'.'],svgGrid(m,n),'Grid rectangle diagram drawn to match the generated grid size.');}
+function qPolygonTriangulations(){var n=R(6,14);var ans=n-2;return Q('polyTri'+n,'Polygon Triangulation','Counting geometry','Hard · 3 points',3,'How many triangles are formed when a convex '+n+'-gon is triangulated from one vertex?',ans,[ans-1,ans+1,n-3,n],'A convex n-gon can be split into n−2 triangles.',''+n+'−2='+ans+'.',['A triangle has 3 sides and needs 1 triangle.','Each additional side adds one triangle.','Formula: n−2.','Answer='+ans+'.'],svgPoly(n),'Polygon triangulation diagram with the correct number of sides labeled.');}
+function qIntegerIsosceles(){var P=R(18,36);var count=0;for(var a=1;a<P;a++){var b=P-2*a;if(b>0&&b<2*a)count++;}return Q('intIso'+P,'Integer Isosceles','Counting geometry','Bonus · 5 points',5,'How many noncongruent isosceles triangles have integer side lengths and perimeter '+P+'?',count,makeWrongNums(count,5),'Let the equal sides be a and a, and the base be b. Use 2a+b='+P+' and b<2a.','There are '+count+' valid triangles.',['Let equal side be a and base be b.','Then 2a+b='+P+'.','Triangle inequality requires b<2a.','Counting positive integer solutions gives '+count+' triangles.'],svgTri('A','B','C','a','a','b','','',''),'Integer triangle diagram.');}
+function qDiagonals(){var n=R(8,14),ans=n*(n-3)/2;return Q('diags','Polygon Diagonals','Counting geometry','Hard · 3 points',3,'How many diagonals does a '+n+'-gon have?',ans,[ans-n,ans+n,ans/2,ans+3],'Diagonals formula is n(n−3)/2.',''+n+'('+n+'−3)/2='+ans+'.',['Use n(n−3)/2.','Substitute n='+n+'.','Answer='+ans+'.'],svgPoly(n),'Polygon diagonals diagram with the correct number of sides labeled.');}
+function qTriangleCounting(){var pieces=R(3,9);var rays=pieces+1;var ans=rays*(rays-1)/2;return Q('triCount'+pieces,'Triangle Counting','Counting geometry','Hard · 3 points',3,'A triangle has '+(pieces-1)+' cevians drawn from one vertex to the opposite side, making '+pieces+' small base pieces. How many triangles are formed using that vertex?',ans,makeWrongNums(ans,10),'Choose any two rays from the vertex to form a triangle.','There are '+rays+' rays, so the number of triangles is C('+rays+',2)='+ans+'.',['The cevians plus the two sides create '+rays+' rays from the vertex.','Each pair of rays forms one triangle.','C('+rays+',2)='+ans+'.'],svgTri('A','B','C','','',pieces+' pieces','','',''),'Counting diagram.');}
+function qGridSquares(){var n=R(3,8);var ans=n*(n+1)*(2*n+1)/6;return Q('gridSq'+n,'Grid Squares','Counting geometry','Hard · 3 points',3,'How many axis-aligned squares are in a '+n+' by '+n+' grid?',ans,makeWrongNums(ans,15),'Count all square sizes from 1 by 1 up to '+n+' by '+n+'.','Total squares=1²+2²+...+'+n+'²='+ans+'.',['1 by 1 squares: '+(n*n)+'.','Continue counting each size up to '+n+' by '+n+'.','Formula 1²+2²+...+'+n+'²='+ans+'.'],svgGrid(n,n),'Grid square diagram drawn to match the generated grid size.');}
+function qHandshakeDiagonals(){var n=R(10,16),ans=n*(n-3)/2;return Q('handDiag','Diagonal Count','Counting geometry','Bonus · 5 points',5,'A convex polygon has '+n+' vertices. How many diagonals does it have?',ans,[ans-5,ans+5,n*(n-1)/2,ans+n],'Choose pairs of vertices, then remove sides.','C(n,2)-n='+ans+'.',['All vertex pairs: '+(n*(n-1)/2)+'.','Subtract '+n+' sides.','Answer='+ans+'.'],svgPoly(n),'Diagonal count diagram with the correct number of sides labeled.');}
+function qSSSReason(){var a=R(5,12),b=R(6,14),c=R(7,16);return Q('sss','Triangle Proof Case','Congruence proof','Hard · 3 points',3,'If AB='+a+', BC='+b+', AC='+c+' and DE='+a+', EF='+b+', DF='+c+', what proves △ABC≅△DEF?','SSS',['SAS','ASA','AAS','HL'],'Three pairs of corresponding sides are congruent.','That is SSS.',['AB=DE='+a+'.','BC=EF='+b+'.','AC=DF='+c+'.','All three corresponding side pairs match, so use SSS.'],svgCongruence('',a,b,c,a,b,c),'Proof reason.');}
+function qSASReason(){var s1=R(5,12),s2=R(7,15),ang=pick([35,40,50,60,70]);return Q('sas','Triangle Proof Case','Congruence proof','Hard · 3 points',3,'If AB='+s1+', AC='+s2+', DE='+s1+', DF='+s2+', and ∠A=∠D='+ang+'°, what proves △ABC≅△DEF?','SAS',['SSS','ASA','AAS','AA'],'The angle is included between the two sides.','Two sides and included angle gives SAS.',['AB=DE='+s1+'.','AC=DF='+s2+'.','Included angles match.','Use SAS.'],svgCongruence('',s1,s2,'',s1,s2,'',ang),'Proof reason.');}
+function qASAReason(){var a1=pick([40,50,60]),side=R(6,14),a2=pick([45,55,65]);return Q('asa','Triangle Proof Case','Congruence proof','Hard · 3 points',3,'If ∠A=∠D='+a1+'°, AB=DE='+side+', and ∠B=∠E='+a2+'°, what proves △ABC≅△DEF?','ASA',['SSS','SAS','AAS','HL'],'The known side is between the two known angles.','Two angles and included side gives ASA.',['Two angles match.','Included side matches.','Use ASA.'],svgCongruence('',side,'','',side,'','',a1,a2),'Proof reason.');}
+function qAASReason(){var a1=pick([35,45,55]),a2=pick([60,70,80]),side=R(6,14);return Q('aas','Triangle Proof Case','Congruence proof','Hard · 3 points',3,'If ∠A=∠D='+a1+'°, ∠C=∠F='+a2+'°, and BC=EF='+side+', what proves △ABC≅△DEF?','AAS',['ASA','SAS','SSS','HL'],'The side is not included between the two angles.','Two angles and a non-included side gives AAS.',['Two angles match.','A non-included side matches.','Use AAS.'],svgCongruence('','',side,'','',side,'',a1,a2),'Proof reason.');}
+function qHLReason(){var leg=R(5,12),hyp=pick([13,15,17,25]);return Q('hl','Right Triangle Proof Case','Right triangle congruence','Hard · 3 points',3,'Two right triangles have congruent hypotenuses of length '+hyp+' and congruent legs of length '+leg+'. What proves the triangles congruent?','HL',['SSS','SAS','ASA','AA'],'HL applies to right triangles with equal hypotenuse and one equal leg.','Use HL.',['Both are right triangles.','Hypotenuse matches.','One leg matches.'],svgRightPair(leg,hyp),'Proof reason.');}
+function qSimilarityReason(){var a=pick([35,45,55]),b=pick([65,75,85]);return Q('simReason','Triangle Relationship Case','Similarity proof','Hard · 3 points',3,'If ∠A=∠D='+a+'° and ∠B=∠E='+b+'°, what proves △ABC∼△DEF?','AA Similarity',['SSS','SAS','HL','CPCTC'],'Two matching angles prove triangle similarity.','Use AA Similarity.',['Two pairs of angles match.','That proves similarity.'],svgCongruence('', '', '', '', '', '', '', a,b),'Similarity proof.');}
+function qCPCTC(){return Q('cpctc','Triangle Proof Follow-Up','Congruence consequences','Hard · 3 points',3,'After proving △ABC≅△DEF, what reason lets us conclude AC=DF?','CPCTC',['SSS','SAS','AA Similarity','Ptolemy'],'Corresponding parts of congruent triangles are congruent.','Use CPCTC after congruence is proven.',['The triangles are congruent.','AC and DF correspond.','Therefore AC=DF by CPCTC.'],svgCongruence('', '', '', '', '', '', '', '', ''),'Congruence consequence.');}
+function qParallelogramProof(){return Q('paraProof','Parallelogram Proof','Quadrilateral proof','Hard · 3 points',3,'In parallelogram ABCD, which fact is always true?','Opposite sides are parallel',['Diagonals are perpendicular','All sides equal','All angles are right','Only one pair of sides parallel'],'Definition of parallelogram.','Opposite sides are parallel.',['A parallelogram has two pairs of parallel sides.'],svgPara('','',''),'Parallelogram diagram.');}
+function qRhombusProof(){return Q('rhombusProof','Rhombus Proof','Quadrilateral proof','Hard · 3 points',3,'In rhombus ABCD, which statement is always true?','All four sides are congruent',['All angles are right','Only one pair of opposite sides is parallel','Diagonals are congruent in every rhombus','No diagonals bisect angles'],'A rhombus is a parallelogram with four congruent sides.','All four sides are congruent.',['Use the definition of rhombus.','A rhombus has four congruent sides.'],svgRhombus(),'Rhombus proof diagram.');}
+function qKiteProof(){return Q('kiteProof','Kite Proof','Quadrilateral proof','Hard · 3 points',3,'In kite ABCD with AB=AD and CB=CD, which diagonal is the axis of symmetry?','AC',['BD','AB','CD','BC'],'The diagonal through the vertices where equal sides meet is the symmetry diagonal.','AC is the symmetry diagonal.',['Equal sides meet at A and C.','The diagonal through A and C is the axis of symmetry.'],svgKite(),'Kite proof diagram.');}
+function qRhombusDiagonals(){return Q('rhombusDiag','Rhombus Diagonal Theorem','Quadrilateral proof','Hard · 3 points',3,'Which theorem is always true for the diagonals of a rhombus?','They are perpendicular',['They are always congruent','They never bisect each other','They are parallel','They form no right angles'],'Rhombus diagonals are perpendicular and bisect each other.','They are perpendicular.',['A rhombus has perpendicular diagonals.','The diagonals also bisect each other.'],svgRhombus(),'Rhombus diagonal theorem.');}
+function qSASSimilarityReason(){return Q('sasSimReason','SAS Similarity Reason','Similarity proof','Hard · 3 points',3,'Two triangles have one included angle congruent and the two surrounding sides proportional. Which similarity theorem applies?','SAS Similarity',['AA Similarity','SSS Congruence','HL Congruence','CPCTC'],'Two proportional sides with the included angle congruent gives SAS Similarity.','Use SAS Similarity.',['Check the included angle.','Check the two side ratios.','Use SAS Similarity.'],svgCongruence('','','','','','','','60°',''),'SAS similarity theorem diagram.');}
+function qSSSSimilarityReason(){return Q('sssSimReason','SSS Similarity Reason','Similarity proof','Hard · 3 points',3,'Two triangles have all three pairs of corresponding sides proportional. Which similarity theorem applies?','SSS Similarity',['SAS Congruence','ASA Congruence','HL Congruence','CPCTC'],'Three proportional side pairs gives SSS Similarity.','Use SSS Similarity.',['Compare all three corresponding side ratios.','If all are equal, use SSS Similarity.'],svgCongruence('','a','b','c','ka','kb','kc','',''),'SSS similarity theorem diagram.');}
+
+function svgMedianTriangle(b,c,a){var base=230,scale=230/a,AB=b*scale,AC=c*scale,bx=100,by=270,cx=330,cy=270;var x=(AB*AB+base*base-AC*AC)/(2*base),h=Math.sqrt(Math.max(0,AB*AB-x*x)),ax=bx+x,ay=270-h,mx=(bx+cx)/2,my=270;return '<svg viewBox="0 0 430 330"><polygon points="'+ax+','+ay+' '+bx+','+by+' '+cx+','+cy+'" fill="none" stroke="#34324a" stroke-width="4"/><line x1="'+ax+'" y1="'+ay+'" x2="'+mx+'" y2="'+my+'" stroke="#b9a7f4" stroke-width="5"/><circle cx="'+mx+'" cy="'+my+'" r="5"/><text x="'+(ax-10)+'" y="'+(ay-15)+'">A</text><text x="78" y="296">B</text><text x="335" y="296">C</text><text x="'+(mx-8)+'" y="300">M</text><text x="120" y="155">'+b+'</text><text x="285" y="155">'+c+'</text><text x="205" y="302">'+a+'</text><text x="'+(mx+10)+'" y="185">median ?</text></svg>';}
+function svgMedianArea(area){return '<svg viewBox="0 0 430 330"><polygon points="215,55 80,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="55" x2="220" y2="275" stroke="#b9a7f4" stroke-width="5"/><circle cx="220" cy="275" r="5"/><text x="207" y="43">A</text><text x="56" y="300">B</text><text x="365" y="300">C</text><text x="210" y="304">M</text><text x="155" y="190">area ?</text><text x="255" y="190">area ?</text><text x="150" y="320">total area '+area+'</text></svg>';}
+function svgCentroid(med){return '<svg viewBox="0 0 430 330"><polygon points="215,50 80,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="50" x2="220" y2="275" stroke="#b9a7f4" stroke-width="5"/><circle cx="218" cy="125" r="5"/><circle cx="220" cy="275" r="5"/><text x="207" y="38">A</text><text x="56" y="300">B</text><text x="365" y="300">C</text><text x="225" y="128">G</text><text x="225" y="300">M</text><text x="235" y="205">median '+med+'</text><text x="160" y="110">longer piece ?</text></svg>';}
+function svgViviani(h){return '<svg viewBox="0 0 430 330"><polygon points="215,50 80,275 350,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="50" x2="215" y2="275" stroke="#ffd36e" stroke-width="4" stroke-dasharray="8 6"/><path d="M215 253 L237 253 L237 275" fill="none" stroke="#34324a" stroke-width="3"/><circle cx="210" cy="185" r="5"/><line x1="210" y1="185" x2="210" y2="275" stroke="#b9a7f4" stroke-width="3"/><line x1="210" y1="185" x2="150" y2="157" stroke="#b9a7f4" stroke-width="3"/><line x1="210" y1="185" x2="275" y2="158" stroke="#b9a7f4" stroke-width="3"/><text x="222" y="170">P</text><text x="222" y="165">altitude '+h+'</text><text x="135" y="170">d1</text><text x="210" y="258">d2</text><text x="280" y="170">d3</text><text x="175" y="310">equilateral</text></svg>';}
+function svgTrapezoid(top,bottom,mid){var x1=135,x2=295,y1=85,y2=255,xb1=75,xb2=355;return '<svg viewBox="0 0 430 330"><polygon points="'+x1+','+y1+' '+x2+','+y1+' '+xb2+','+y2+' '+xb1+','+y2+'" fill="none" stroke="#34324a" stroke-width="4"/><line x1="110" y1="170" x2="320" y2="170" stroke="#b9a7f4" stroke-width="5"/><text x="196" y="72">base '+top+'</text><text x="190" y="286">base '+bottom+'</text><text x="196" y="158">midsegment '+mid+'</text><text x="185" y="200">parallel bases</text></svg>';}
+function svgRectangleCyclic(w,h){var x=100,y=70,W=230,H=170;return '<svg viewBox="0 0 430 330"><circle cx="215" cy="155" r="143" fill="none" stroke="#e6def7" stroke-width="3"/><rect x="'+x+'" y="'+y+'" width="'+W+'" height="'+H+'" fill="none" stroke="#34324a" stroke-width="4"/><line x1="'+x+'" y1="'+y+'" x2="'+(x+W)+'" y2="'+(y+H)+'" stroke="#b9a7f4" stroke-width="4"/><line x1="'+(x+W)+'" y1="'+y+'" x2="'+x+'" y2="'+(y+H)+'" stroke="#b9a7f4" stroke-width="4"/><text x="200" y="58">side '+w+'</text><text x="338" y="158">side '+h+'</text><text x="170" y="168">diagonal product?</text></svg>';}
+function svgCyclicAngle(a,c){return '<svg viewBox="0 0 430 330"><circle cx="215" cy="165" r="112" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="150,78 315,115 285,255 110,220" fill="none" stroke="#b9a7f4" stroke-width="4"/><text x="138" y="68">A</text><text x="320" y="116">B</text><text x="290" y="277">C</text><text x="92" y="224">D</text><text x="158" y="112">'+a+'°</text><text x="260" y="226">'+c+'</text></svg>';}
+function svgCeva(p,q,r,s,unk){return '<svg viewBox="0 0 430 330"><polygon points="215,45 75,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><circle cx="215" cy="170" r="4"/><line x1="215" y1="45" x2="205" y2="275" stroke="#b9a7f4" stroke-width="4"/><line x1="75" y1="275" x2="275" y2="134" stroke="#ffdce8" stroke-width="4"/><line x1="360" y1="275" x2="155" y2="142" stroke="#ffdce8" stroke-width="4"/><text x="208" y="35">A</text><text x="50" y="300">B</text><text x="365" y="300">C</text><text x="198" y="300">D</text><text x="278" y="130">E</text><text x="142" y="138">F</text><text x="118" y="268">BD:'+p+'</text><text x="245" y="268">DC:'+q+'</text><text x="250" y="96">CE:'+r+'</text><text x="180" y="90">EA:'+s+'</text><text x="106" y="177">AF/FB='+unk+'</text></svg>';}
+function svgMenelaus(p,q,r,s,unk){return '<svg viewBox="0 0 430 330"><polygon points="215,55 80,265 350,265" fill="none" stroke="#34324a" stroke-width="4"/><line x1="55" y1="285" x2="365" y2="80" stroke="#b9a7f4" stroke-width="5"/><text x="210" y="45">A</text><text x="58" y="292">B</text><text x="355" y="285">C</text><text x="150" y="264">D</text><text x="263" y="145">E</text><text x="125" y="168">F</text><text x="102" y="252">BD/DC='+p+'/'+q+'</text><text x="255" y="120">CE/EA='+r+'/'+s+'</text><text x="95" y="145">AF/FB='+unk+'</text></svg>';}
+function svgSymmedian(ab,ac,bc){return '<svg viewBox="0 0 430 330"><polygon points="215,50 80,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="50" x2="190" y2="275" stroke="#b9a7f4" stroke-width="5"/><text x="210" y="38">A</text><text x="56" y="300">B</text><text x="365" y="300">C</text><text x="184" y="300">K</text><text x="112" y="160">AB='+ab+'</text><text x="276" y="160">AC='+ac+'</text><text x="194" y="305">BC='+bc+'</text><text x="125" y="266">BK=?</text><text x="210" y="205">symmedian</text></svg>';}
+function svgEuler(go){return '<svg viewBox="0 0 430 330"><polygon points="215,50 85,265 350,265" fill="none" stroke="#e6def7" stroke-width="4"/><line x1="105" y1="190" x2="325" y2="120" stroke="#34324a" stroke-width="5"/><circle cx="150" cy="176" r="5"/><circle cx="230" cy="151" r="5"/><circle cx="310" cy="125" r="5"/><text x="138" y="164">H</text><text x="222" y="140">G</text><text x="316" y="118">O</text><text x="250" y="145">GO='+go+'</text><text x="152" y="205">HG=?</text><text x="150" y="235">H, G, O collinear</text></svg>';}
+function svgIncenter(a,unknown){return '<svg viewBox="0 0 430 330"><polygon points="215,55 85,270 350,270" fill="none" stroke="#34324a" stroke-width="4"/><circle cx="215" cy="185" r="5" fill="#b9a7f4"/><line x1="215" y1="185" x2="85" y2="270" stroke="#ffdce8" stroke-width="3"/><line x1="215" y1="185" x2="350" y2="270" stroke="#ffdce8" stroke-width="3"/><line x1="215" y1="55" x2="215" y2="185" stroke="#b9a7f4" stroke-width="3"/><text x="207" y="45">A</text><text x="62" y="295">B</text><text x="355" y="295">C</text><text x="224" y="184">I</text><text x="205" y="98">'+a+'°</text><text x="222" y="225">∠BIC='+unknown+'</text><text x="172" y="165">angle bisectors</text></svg>';}
+function svgSimilarTriangles(ab,bc,de,ef){return '<svg viewBox="0 0 430 330"><polygon points="70,245 135,105 215,245" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="255,245 325,70 405,245" fill="none" stroke="#b9a7f4" stroke-width="4"/><text x="128" y="94">A</text><text x="50" y="270">B</text><text x="218" y="270">C</text><text x="318" y="60">D</text><text x="236" y="270">E</text><text x="408" y="270">F</text><text x="88" y="170">AB='+ab+'</text><text x="130" y="268">BC='+bc+'</text><text x="282" y="158">DE='+de+'</text><text x="328" y="268">EF='+ef+'</text><text x="175" y="78">△ABC ∼ △DEF</text></svg>';}
+function svgMidpointOnly(x1,y1,x2,y2){return '<svg viewBox="0 0 430 330"><line x1="60" y1="270" x2="380" y2="270" stroke="#e6def7" stroke-width="3"/><line x1="80" y1="290" x2="80" y2="40" stroke="#e6def7" stroke-width="3"/><line x1="105" y1="250" x2="325" y2="105" stroke="#34324a" stroke-width="5"/><circle cx="105" cy="250" r="5"/><circle cx="215" cy="178" r="5" fill="#b9a7f4"/><circle cx="325" cy="105" r="5"/><text x="65" y="280">A('+x1+','+y1+')</text><text x="330" y="100">B('+x2+','+y2+')</text><text x="223" y="174">M</text><text x="170" y="150">AM²?</text></svg>';}
+function svgParallelSameSide(a,b){return '<svg viewBox="0 0 430 330"><line x1="70" y1="95" x2="360" y2="95" stroke="#34324a" stroke-width="4"/><line x1="70" y1="235" x2="360" y2="235" stroke="#34324a" stroke-width="4"/><line x1="160" y1="45" x2="290" y2="285" stroke="#b9a7f4" stroke-width="4"/><path d="M174 95 A34 34 0 0 1 205 115" fill="none" stroke="#ffd36e" stroke-width="4"/><path d="M246 215 A34 34 0 0 1 275 235" fill="none" stroke="#ffd36e" stroke-width="4"/><text x="207" y="126">'+a+'</text><text x="246" y="207">'+b+'</text><text x="84" y="83">parallel</text></svg>';}
+function svgParallelAltInterior(a,b){return '<svg viewBox="0 0 430 330"><line x1="70" y1="95" x2="360" y2="95" stroke="#34324a" stroke-width="4"/><line x1="70" y1="235" x2="360" y2="235" stroke="#34324a" stroke-width="4"/><line x1="155" y1="45" x2="285" y2="285" stroke="#b9a7f4" stroke-width="4"/><path d="M185 95 A32 32 0 0 0 210 118" fill="none" stroke="#ffd36e" stroke-width="4"/><path d="M230 212 A32 32 0 0 0 255 235" fill="none" stroke="#ffd36e" stroke-width="4"/><text x="210" y="126">'+a+'</text><text x="258" y="215">'+b+'</text><text x="132" y="170">alternate interior</text></svg>';}
+function svgParallelCorresponding(a,b){return '<svg viewBox="0 0 430 330"><line x1="70" y1="95" x2="360" y2="95" stroke="#34324a" stroke-width="4"/><line x1="70" y1="235" x2="360" y2="235" stroke="#34324a" stroke-width="4"/><line x1="155" y1="45" x2="285" y2="285" stroke="#b9a7f4" stroke-width="4"/><path d="M154 95 A32 32 0 0 1 184 78" fill="none" stroke="#ffd36e" stroke-width="4"/><path d="M230 235 A32 32 0 0 1 260 218" fill="none" stroke="#ffd36e" stroke-width="4"/><text x="185" y="80">'+a+'</text><text x="262" y="220">'+b+'</text><text x="135" y="170">corresponding</text></svg>';}
+function svgExterior(ext,a,b){return '<svg viewBox="0 0 430 330">'
++ '<polygon points="110,260 215,80 330,260" fill="none" stroke="#34324a" stroke-width="4"/>'
++ '<line x1="330" y1="260" x2="380" y2="260" stroke="#b9a7f4" stroke-width="4"/>'
++ '<path d="M330 260 A40 40 0 0 0 360 230" fill="none" stroke="#ffd36e" stroke-width="4"/>'
++ '<text x="362" y="222">'+ext+'°</text>'
++ '<text x="155" y="220">'+a+'°</text>'
++ '<text x="255" y="220">'+b+'°</text>'
++ '<text x="100" y="280">B</text>'
++ '<text x="210" y="65">A</text>'
++ '<text x="330" y="280">C</text>'
++ '</svg>';}
+function isNumLabel(v){var s=String(v||'').trim();return s!==''&&!isNaN(Number(s));}
+function nLabel(v){return Number(String(v||'').trim());}
+function svgTri(labelA,labelB,labelC,side1,side2,side3,angleA,angleB,angleC){
+  labelA=labelA||'A';labelB=labelB||'B';labelC=labelC||'C';side1=side1||'';side2=side2||'';side3=side3||'';angleA=angleA||'';angleB=angleB||'';angleC=angleC||'';
+  var ax=215,ay=55,bx=85,by=270,cx=345,cy=270;
+  if(isNumLabel(side1)&&isNumLabel(side2)&&isNumLabel(side3)){
+    var AB=nLabel(side1), AC=nLabel(side2), BC=nLabel(side3);
+    if(AB+AC>BC&&AB+BC>AC&&AC+BC>AB){
+      var scale=Math.min(235/BC,205/Math.max(AB,AC));
+      var base=BC*scale;
+      bx=215-base/2; by=270; cx=215+base/2; cy=270;
+      var xFromB=(AB*AB+BC*BC-AC*AC)/(2*BC)*scale;
+      var h2=Math.max(0,AB*AB*scale*scale-xFromB*xFromB);
+      ax=bx+xFromB; ay=270-Math.sqrt(h2);
+    }
+  }
+  function midText(x1,y1,x2,y2,txt,offx,offy){return txt?'<text x="'+((x1+x2)/2+offx)+'" y="'+((y1+y2)/2+offy)+'" font-size="16" text-anchor="middle">'+txt+'</text>':'';}
+  return '<svg viewBox="0 0 430 330">'
+    +'<polygon points="'+ax+','+ay+' '+bx+','+by+' '+cx+','+cy+'" fill="none" stroke="#34324a" stroke-width="4"/>'
+    +'<circle cx="'+ax+'" cy="'+ay+'" r="4"/><circle cx="'+bx+'" cy="'+by+'" r="4"/><circle cx="'+cx+'" cy="'+cy+'" r="4"/>'
+    +'<text x="'+(ax-10)+'" y="'+(ay-14)+'" font-size="20">'+labelA+'</text><text x="'+(bx-22)+'" y="'+(by+24)+'" font-size="20">'+labelB+'</text><text x="'+(cx+8)+'" y="'+(cy+24)+'" font-size="20">'+labelC+'</text>'
+    +midText(ax,ay,bx,by,side1,-18,-4)+midText(ax,ay,cx,cy,side2,18,-4)+midText(bx,by,cx,cy,side3,0,30)
+    +(angleA?'<text x="'+ax+'" y="'+(ay+42)+'" font-size="16" text-anchor="middle">'+angleA+'</text>':'')
+    +(angleB?'<text x="'+(bx+42)+'" y="'+(by-22)+'" font-size="16" text-anchor="middle">'+angleB+'</text>':'')
+    +(angleC?'<text x="'+(cx-42)+'" y="'+(cy-22)+'" font-size="16" text-anchor="middle">'+angleC+'</text>':'')
+    +'</svg>';
+}
+function svgNested(){return '<svg viewBox="0 0 430 330"><polygon points="215,45 65,270 365,270" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="215,120 145,235 285,235" fill="none" stroke="#b9a7f4" stroke-width="5"/><text x="200" y="180" font-size="18">k</text></svg>';}
+function svgBisector(leftRatio,rightRatio,total,target){leftRatio=leftRatio||'m';rightRatio=rightRatio||'n';total=total||'';target=target||'?';return '<svg viewBox="0 0 430 330"><polygon points="215,45 70,275 365,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="45" x2="205" y2="275" stroke="#b9a7f4" stroke-width="4"/><path d="M188 85 A34 34 0 0 0 217 105" fill="none" stroke="#ffd36e" stroke-width="4"/><path d="M217 105 A34 34 0 0 0 246 85" fill="none" stroke="#ffd36e" stroke-width="4"/><circle cx="215" cy="45" r="4"/><circle cx="70" cy="275" r="4"/><circle cx="365" cy="275" r="4"/><circle cx="205" cy="275" r="4"/><text x="207" y="35">A</text><text x="48" y="297">B</text><text x="370" y="297">C</text><text x="198" y="300">D</text><text x="120" y="156">AB:'+leftRatio+'</text><text x="270" y="156">AC:'+rightRatio+'</text><text x="132" y="263">BD</text><text x="268" y="263">DC</text><text x="180" y="235">[ABD]='+target+'</text><text x="150" y="322">Total area '+total+'</text></svg>';}
+function svgQuad(angleA,angleB,angleC,angleD,sideTop,sideBottom){angleA=angleA||'';angleB=angleB||'';angleC=angleC||'';angleD=angleD||'';sideTop=sideTop||'';sideBottom=sideBottom||'';return '<svg viewBox="0 0 430 330"><polygon points="100,80 320,80 360,250 65,260" fill="none" stroke="#34324a" stroke-width="4"/><text x="82" y="68" font-size="20">A</text><text x="326" y="68" font-size="20">B</text><text x="365" y="274" font-size="20">C</text><text x="44" y="284" font-size="20">D</text><text x="118" y="118" font-size="17">'+angleA+'</text><text x="282" y="118" font-size="17">'+angleB+'</text><text x="315" y="232" font-size="17">'+angleC+'</text><text x="82" y="236" font-size="17">'+angleD+'</text><text x="198" y="62" font-size="17">'+sideTop+'</text><text x="186" y="306" font-size="17">'+sideBottom+'</text></svg>';}
+function svgCircle(l1,l2,l3,l4){l1=l1||'';l2=l2||'';l3=l3||'';l4=l4||'';return '<svg viewBox="0 0 430 330"><circle cx="215" cy="165" r="110" fill="none" stroke="#34324a" stroke-width="4"/><circle cx="215" cy="165" r="4"/><text x="205" y="155">O</text><line x1="105" y1="165" x2="325" y2="165" stroke="#b9a7f4" stroke-width="5"/><line x1="145" y1="250" x2="285" y2="80" stroke="#ffdce8" stroke-width="5"/><text x="90" y="160">A</text><text x="330" y="160">B</text><text x="130" y="270">C</text><text x="290" y="70">D</text><text x="135" y="145">'+l1+'</text><text x="275" y="145">'+l2+'</text><text x="190" y="265">'+l3+'</text><text x="260" y="95">'+l4+'</text></svg>';}
+function svgIntersectChords(ae,ec,be,ed){return '<svg viewBox="0 0 430 330"><circle cx="215" cy="165" r="112" fill="none" stroke="#34324a" stroke-width="4"/><line x1="105" y1="125" x2="325" y2="215" stroke="#b9a7f4" stroke-width="5"/><line x1="125" y1="230" x2="310" y2="95" stroke="#ffdce8" stroke-width="5"/><circle cx="210" cy="168" r="5"/><text x="92" y="120">A</text><text x="330" y="224">C</text><text x="108" y="252">B</text><text x="316" y="92">D</text><text x="214" y="162">E</text><text x="145" y="135">'+ae+'</text><text x="260" y="204">'+ec+'</text><text x="150" y="218">'+be+'</text><text x="266" y="118">'+ed+'</text></svg>';}
+function svgTangentSecant(pa,ab,pt){return '<svg viewBox="0 0 430 330"><circle cx="250" cy="165" r="92" fill="none" stroke="#34324a" stroke-width="4"/><line x1="65" y1="235" x2="340" y2="150" stroke="#b9a7f4" stroke-width="5"/><line x1="65" y1="235" x2="250" y2="73" stroke="#ffdce8" stroke-width="5"/><line x1="250" y1="165" x2="250" y2="73" stroke="#ffd36e" stroke-width="3" stroke-dasharray="7 5"/><path d="M250 92 L268 92 L268 74" fill="none" stroke="#34324a" stroke-width="3"/><circle cx="65" cy="235" r="4"/><circle cx="165" cy="204" r="4"/><circle cx="340" cy="150" r="4"/><circle cx="250" cy="73" r="4"/><text x="45" y="255">P</text><text x="155" y="196">A</text><text x="345" y="152">B</text><text x="250" y="64">T</text><text x="262" y="160">O</text><text x="105" y="214">PA='+pa+'</text><text x="238" y="188">AB='+ab+'</text><text x="142" y="130">PT='+pt+'</text></svg>';}
+function svgSecantQuadratic(ext,inside,power){return '<svg viewBox="0 0 430 330"><circle cx="250" cy="165" r="92" fill="none" stroke="#34324a" stroke-width="4"/><line x1="65" y1="235" x2="340" y2="150" stroke="#b9a7f4" stroke-width="5"/><circle cx="65" cy="235" r="4"/><circle cx="165" cy="204" r="4"/><circle cx="340" cy="150" r="4"/><text x="45" y="255">P</text><text x="155" y="196">A</text><text x="345" y="152">B</text><text x="105" y="214">PA='+ext+'</text><text x="238" y="188">AB='+inside+'</text><text x="180" y="65">Power(P) = '+power+'</text></svg>';}
+function svgTangentRadius(r,t){return '<svg viewBox="0 0 430 330"><circle cx="235" cy="165" r="95" fill="none" stroke="#34324a" stroke-width="4"/><line x1="120" y1="260" x2="345" y2="260" stroke="#ffdce8" stroke-width="5"/><line x1="235" y1="165" x2="235" y2="260" stroke="#b9a7f4" stroke-width="5"/><path d="M235 240 L255 240 L255 260" fill="none" stroke="#34324a" stroke-width="3"/><text x="220" y="160">O</text><text x="238" y="280">T</text><text x="100" y="280">P</text><text x="242" y="215">'+r+'</text><text x="160" y="252">'+t+'</text></svg>';}
+function svgEqualPowers(tan,ext,whole){return '<svg viewBox="0 0 430 330"><circle cx="270" cy="165" r="85" fill="none" stroke="#34324a" stroke-width="4"/><line x1="65" y1="240" x2="270" y2="80" stroke="#ffdce8" stroke-width="5"/><line x1="65" y1="240" x2="355" y2="165" stroke="#b9a7f4" stroke-width="5"/><circle cx="65" cy="240" r="4"/><circle cx="270" cy="80" r="4"/><circle cx="150" cy="218" r="4"/><circle cx="355" cy="165" r="4"/><text x="45" y="260">P</text><text x="272" y="72">T</text><text x="140" y="210">A</text><text x="360" y="164">B</text><text x="150" y="145">PT='+tan+'</text><text x="102" y="230">PA='+ext+'</text><text x="250" y="202">PB='+whole+'</text></svg>';}
+function svgSemicircleChord(chord,h,label){return '<svg viewBox="0 0 430 330"><path d="M95 250 A120 120 0 0 1 335 250" fill="none" stroke="#34324a" stroke-width="4"/><line x1="95" y1="250" x2="335" y2="250" stroke="#34324a" stroke-width="4"/><line x1="150" y1="155" x2="280" y2="155" stroke="#b9a7f4" stroke-width="5"/><line x1="215" y1="250" x2="215" y2="155" stroke="#ffdce8" stroke-width="4"/><path d="M215 175 L235 175 L235 155" fill="none" stroke="#34324a" stroke-width="3"/><circle cx="215" cy="250" r="4"/><circle cx="150" cy="155" r="4"/><circle cx="280" cy="155" r="4"/><text x="205" y="270">O</text><text x="140" y="148">A</text><text x="285" y="148">B</text><text x="190" y="145">AB='+chord+'</text><text x="222" y="205">height '+h+'</text><text x="285" y="230">'+label+'</text></svg>';}
+function svgCircleLabeled(label,angleLabel){angleLabel=angleLabel||'?';var isSector=String(angleLabel).toLowerCase().indexOf('sector')>-1;var center=isSector?'<circle cx="215" cy="165" r="4"/><text x="202" y="160">O</text><line x1="215" y1="165" x2="305" y2="102" stroke="#b9a7f4" stroke-width="4"/><line x1="215" y1="165" x2="325" y2="165" stroke="#b9a7f4" stroke-width="4"/><path d="M260 165 A45 45 0 0 0 252 139" fill="none" stroke="#ffd36e" stroke-width="4"/><text x="265" y="145">'+label+'</text><text x="245" y="196">sector</text>':'<line x1="145" y1="250" x2="215" y2="55" stroke="#b9a7f4" stroke-width="4"/><line x1="285" y1="250" x2="215" y2="55" stroke="#b9a7f4" stroke-width="4"/><path d="M145 250 A110 110 0 0 0 285 250" fill="none" stroke="#ffdce8" stroke-width="8"/><text x="205" y="45">A</text><text x="130" y="270">B</text><text x="290" y="270">C</text><text x="175" y="290">arc '+label+'</text><text x="210" y="95" text-anchor="middle">'+angleLabel+'</text>';return '<svg viewBox="0 0 430 330"><circle cx="215" cy="165" r="110" fill="none" stroke="#34324a" stroke-width="4"/>'+center+'</svg>';}
+function svgAltitudeHypotenuse(a,b){return '<svg viewBox="0 0 430 330"><polygon points="95,260 335,260 190,90" fill="none" stroke="#34324a" stroke-width="4"/><line x1="190" y1="90" x2="190" y2="260" stroke="#ffdce8" stroke-width="4"/><path d="M190 240 L210 240 L210 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="132" y="282">'+a+'</text><text x="250" y="282">'+b+'</text><text x="198" y="178">h=?</text><text x="88" y="282">A</text><text x="335" y="282">B</text><text x="184" y="80">C</text></svg>';}
+function svgScaledTriple(shortLeg){return '<svg viewBox="0 0 430 330"><polygon points="100,260 100,80 335,260" fill="none" stroke="#34324a" stroke-width="4"/><path d="M100 235 L125 235 L125 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="128" y="242">90°</text><text x="48" y="175">short leg '+shortLeg+'</text><text x="238" y="145">hyp ?</text><text x="210" y="292">other leg</text></svg>';}
+function svgRightRatio(a,b,hyp){return '<svg viewBox="0 0 430 330"><polygon points="100,260 100,80 335,260" fill="none" stroke="#34324a" stroke-width="4"/><path d="M100 235 L125 235 L125 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="128" y="242">90°</text><text x="46" y="175">leg ratio '+a+'</text><text x="205" y="292">leg ratio '+b+'</text><text x="250" y="145">hyp '+hyp+'</text><text x="120" y="110">shorter leg?</text></svg>';}
+function svgMissingLeg(leg,hyp){return '<svg viewBox="0 0 430 330"><polygon points="100,260 100,80 335,260" fill="none" stroke="#34324a" stroke-width="4"/><path d="M100 235 L125 235 L125 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="128" y="242">90°</text><text x="50" y="175">leg '+leg+'</text><text x="220" y="292">leg ?</text><text x="255" y="148">hyp '+hyp+'</text></svg>';}
+function svgRight(left,bottom,hyp,topAngle){
+  left=left||'';bottom=bottom||'';hyp=hyp||'';topAngle=topAngle||'';
+  var lx=100,ly=260,tx=100,ty=80,rx=335,ry=260;
+  if(isNumLabel(left)&&isNumLabel(bottom)){
+    var L=nLabel(left),B=nLabel(bottom),scale=Math.min(180/L,240/B);
+    tx=100;ty=260-L*scale;rx=100+B*scale;ry=260;
+  }
+  return '<svg viewBox="0 0 430 330"><polygon points="'+lx+','+ly+' '+tx+','+ty+' '+rx+','+ry+'" fill="none" stroke="#34324a" stroke-width="4"/><path d="M'+lx+' '+(ly-25)+' L'+(lx+25)+' '+(ly-25)+' L'+(lx+25)+' '+ly+'" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="'+(lx+28)+'" y="'+(ly-18)+'">90°</text><text x="'+(lx-52)+'" y="'+((ly+ty)/2)+'">leg '+left+'</text><text x="'+((lx+rx)/2)+'" y="'+(ly+32)+'">leg '+bottom+'</text><text x="'+((tx+rx)/2+18)+'" y="'+((ty+ry)/2-8)+'">hyp '+hyp+'</text><text x="'+(tx+18)+'" y="'+(ty+30)+'">'+topAngle+'</text></svg>';
+}
+function svgRightLabeled(a,b,angA,angC){
+  a=a||'';b=b||'';angA=angA||'';angC=angC||'';
+  var lx=100,ly=260,tx=100,ty=80,rx=335,ry=260;
+  if(isNumLabel(a)&&isNumLabel(b)){var L=nLabel(a),B=nLabel(b),scale=Math.min(180/L,240/B);tx=100;ty=260-L*scale;rx=100+B*scale;}
+  return '<svg viewBox="0 0 430 330"><polygon points="'+lx+','+ly+' '+tx+','+ty+' '+rx+','+ry+'" fill="none" stroke="#34324a" stroke-width="4"/><path d="M'+lx+' '+(ly-25)+' L'+(lx+25)+' '+(ly-25)+' L'+(lx+25)+' '+ly+'" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="'+(lx-50)+'" y="'+((ly+ty)/2)+'">leg '+a+'</text><text x="'+((lx+rx)/2)+'" y="'+(ly+32)+'">leg '+b+'</text><text x="'+(lx+28)+'" y="'+(ly-18)+'">90°</text><text x="'+(tx+18)+'" y="'+(ty+32)+'">'+angA+'</text><text x="'+(rx-48)+'" y="'+(ry-20)+'">'+angC+'</text></svg>';
+}
+function svgRightPair(leg,hyp){return '<svg viewBox="0 0 430 330"><polygon points="85,260 85,95 230,260" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="270,260 270,95 395,260" fill="none" stroke="#34324a" stroke-width="4"/><path d="M85 238 L108 238 L108 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><path d="M270 238 L293 238 L293 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><text x="42" y="180">leg '+leg+'</text><text x="155" y="170">hyp '+hyp+'</text><text x="225" y="180">leg '+leg+'</text><text x="328" y="170">hyp '+hyp+'</text><text x="105" y="238">90°</text><text x="295" y="238">90°</text></svg>';}
+function svgCoord(a,b,c,note){return '<svg viewBox="0 0 430 330"><line x1="70" y1="270" x2="370" y2="270" stroke="#e6def7" stroke-width="3"/><line x1="80" y1="290" x2="80" y2="40" stroke="#e6def7" stroke-width="3"/><polygon points="95,260 320,220 155,70" fill="none" stroke="#34324a" stroke-width="4"/><circle cx="95" cy="260" r="4"/><circle cx="320" cy="220" r="4"/><circle cx="155" cy="70" r="4"/><text x="52" y="292">'+(a||'A')+'</text><text x="278" y="248">'+(b||'B')+'</text><text x="118" y="58">'+(c||'C')+'</text><text x="190" y="150">'+(note||'')+'</text></svg>';}
+function svgCoordRight(a,b){return '<svg viewBox="0 0 430 330"><line x1="70" y1="270" x2="370" y2="270" stroke="#e6def7" stroke-width="3"/><line x1="80" y1="290" x2="80" y2="40" stroke="#e6def7" stroke-width="3"/><polygon points="95,260 315,260 95,90" fill="none" stroke="#34324a" stroke-width="4"/><path d="M95 238 L117 238 L117 260" fill="none" stroke="#b9a7f4" stroke-width="3"/><circle cx="95" cy="260" r="4"/><circle cx="315" cy="260" r="4"/><circle cx="95" cy="90" r="4"/><text x="48" y="292">A(0,0)</text><text x="285" y="292">B('+a+',0)</text><text x="42" y="82">C(0,'+b+')</text><text x="190" y="282">base '+a+'</text><text x="35" y="176">height '+b+'</text><text x="118" y="242">90°</text></svg>';}
+function svgSlope(rise,run){return '<svg viewBox="0 0 430 330"><line x1="60" y1="260" x2="370" y2="260" stroke="#e6def7" stroke-width="3"/><line x1="75" y1="290" x2="75" y2="40" stroke="#e6def7" stroke-width="3"/><line x1="105" y1="235" x2="265" y2="115" stroke="#34324a" stroke-width="5"/><line x1="155" y1="260" x2="315" y2="140" stroke="#b9a7f4" stroke-width="5"/><line x1="155" y1="260" x2="315" y2="260" stroke="#ffd36e" stroke-width="3"/><line x1="315" y1="260" x2="315" y2="140" stroke="#ffd36e" stroke-width="3"/><text x="205" y="282">run '+run+'</text><text x="322" y="205">rise '+rise+'</text><text x="115" y="116">slope 3/4</text><text x="225" y="142">parallel</text></svg>';}
+function svgCoordLabeled(){return '<svg viewBox="0 0 430 330"><line x1="70" y1="270" x2="370" y2="270" stroke="#e6def7" stroke-width="3"/><line x1="80" y1="290" x2="80" y2="40" stroke="#e6def7" stroke-width="3"/><line x1="110" y1="240" x2="310" y2="120" stroke="#b9a7f4" stroke-width="5"/><text x="75" y="260">A(2,3)</text><text x="212" y="176">M(8,6)</text><text x="315" y="118">B(14,9)</text></svg>';}
+function svgCoordRectangle(x,y,w,h){return '<svg viewBox="0 0 430 330"><line x1="60" y1="270" x2="380" y2="270" stroke="#e6def7" stroke-width="3"/><line x1="80" y1="290" x2="80" y2="40" stroke="#e6def7" stroke-width="3"/><rect x="105" y="85" width="230" height="155" fill="none" stroke="#34324a" stroke-width="4"/><circle cx="105" cy="240" r="4"/><circle cx="335" cy="240" r="4"/><circle cx="335" cy="85" r="4"/><circle cx="105" cy="85" r="4"/><text x="65" y="266">A('+x+','+y+')</text><text x="292" y="266">B('+(x+w)+','+y+')</text><text x="302" y="78">C('+(x+w)+','+(y+h)+')</text><text x="60" y="78">D('+x+','+(y+h)+')</text><text x="196" y="264">width '+w+'</text><text x="342" y="166">height '+h+'</text><text x="190" y="165">area ?</text></svg>';}
+function svgRectCoord(){return svgCoordRectangle(1,2,8,5);}
+function svgShadedRect(W,H,a,b){W=W||'W';H=H||'H';a=a||'a';b=b||'b';return '<svg viewBox="0 0 430 330"><rect x="85" y="70" width="260" height="190" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="345,260 255,260 345,180" fill="#ffdce8" stroke="#b9a7f4" stroke-width="3"/><path d="M345 240 L325 240 L325 260" fill="none" stroke="#34324a" stroke-width="3"/><text x="205" y="284">width '+W+'</text><text x="42" y="170">height '+H+'</text><text x="292" y="252">'+a+'</text><text x="350" y="222">'+b+'</text><text x="248" y="175">cut-out</text></svg>';}
+function svgRhombus(){return '<svg viewBox="0 0 430 330"><polygon points="215,55 340,165 215,275 90,165" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="55" x2="215" y2="275" stroke="#b9a7f4" stroke-width="4"/><line x1="90" y1="165" x2="340" y2="165" stroke="#ffdce8" stroke-width="4"/><path d="M215 145 L235 145 L235 165" fill="none" stroke="#34324a" stroke-width="3"/><text x="207" y="45">A</text><text x="348" y="170">B</text><text x="207" y="300">C</text><text x="68" y="170">D</text><text x="165" y="95">≅</text><text x="270" y="95">≅</text><text x="270" y="240">≅</text><text x="165" y="240">≅</text></svg>';}
+function svgKite(){return '<svg viewBox="0 0 430 330"><polygon points="215,45 335,155 215,285 95,155" fill="none" stroke="#34324a" stroke-width="4"/><line x1="215" y1="45" x2="215" y2="285" stroke="#b9a7f4" stroke-width="5"/><line x1="95" y1="155" x2="335" y2="155" stroke="#ffdce8" stroke-width="4"/><text x="207" y="35">A</text><text x="342" y="160">B</text><text x="207" y="307">C</text><text x="72" y="160">D</text><text x="170" y="95">AB=AD</text><text x="245" y="240">CB=CD</text><text x="225" y="168">AC axis</text></svg>';}
+function svgPara(base,height,diag){base=base||'';height=height||'';var diagonal=diag?'<line x1="105" y1="245" x2="360" y2="95" stroke="#b9a7f4" stroke-width="4"/>':'';return '<svg viewBox="0 0 430 330"><polygon points="105,245 315,245 360,95 150,95" fill="none" stroke="#34324a" stroke-width="4"/>'+diagonal+'<line x1="150" y1="95" x2="150" y2="245" stroke="#ffd36e" stroke-width="4" stroke-dasharray="8 6"/><path d="M150 225 L170 225 L170 245" fill="none" stroke="#34324a" stroke-width="3"/><text x="196" y="266">base '+base+'</text><text x="158" y="175">height '+height+'</text><text x="225" y="160">diagonal</text></svg>';}
+function svgParallel(a,b){return '<svg viewBox="0 0 430 330"><line x1="60" y1="110" x2="370" y2="110" stroke="#34324a" stroke-width="4"/><line x1="60" y1="230" x2="370" y2="230" stroke="#34324a" stroke-width="4"/><line x1="150" y1="50" x2="285" y2="280" stroke="#b9a7f4" stroke-width="4"/><text x="258" y="102">'+(a||'')+'</text><text x="146" y="134">'+(b||'')+'</text></svg>';}
+function svgExteriorAngle(leftAngle,rightAngle,extAngle){return '<svg viewBox="0 0 430 330"><polygon points="215,65 85,260 330,260" fill="none" stroke="#34324a" stroke-width="4"/><line x1="330" y1="260" x2="390" y2="260" stroke="#34324a" stroke-width="4"/><text x="205" y="55">A</text><text x="65" y="285">B</text><text x="333" y="285">C</text><text x="118" y="236">'+leftAngle+'</text><text x="255" y="236">'+rightAngle+'</text><text x="350" y="240">'+extAngle+'</text></svg>';}
+function svgPoly(n){
+  n=n||7;
+  var cx=215,cy=165,r=112,pts=[];
+  for(var i=0;i<n;i++){var a=-Math.PI/2+2*Math.PI*i/n;pts.push((cx+r*Math.cos(a))+','+(cy+r*Math.sin(a)));}
+  return '<svg viewBox="0 0 430 330"><polygon points="'+pts.join(' ')+'" fill="none" stroke="#34324a" stroke-width="4"/><text x="'+(cx-12)+'" y="'+cy+'">'+n+'-gon</text></svg>';
+}
+function svgGrid(m,n){
+  m=m||4;n=n||4;
+  var lines='',x0=95,y0=55,w=220,h=220;
+  for(var i=0;i<=m;i++){var x=x0+i*w/m;lines+='<line x1="'+x+'" y1="'+y0+'" x2="'+x+'" y2="'+(y0+h)+'"/>';}
+  for(var j=0;j<=n;j++){var y=y0+j*h/n;lines+='<line x1="'+x0+'" y1="'+y+'" x2="'+(x0+w)+'" y2="'+y+'"/>';}
+  return '<svg viewBox="0 0 430 330"><g stroke="#34324a" stroke-width="3">'+lines+'</g><text x="165" y="305">'+m+' by '+n+' grid</text></svg>';
+}
+function svgSector(r,theta){return '<svg viewBox="0 0 430 330"><circle cx="215" cy="165" r="110" fill="none" stroke="#34324a" stroke-width="4"/><path d="M215 165 L325 165 A110 110 0 0 0 270 70 Z" fill="#ffdce8" stroke="#b9a7f4" stroke-width="4" opacity=".75"/><circle cx="215" cy="165" r="4"/><text x="202" y="160">O</text><text x="258" y="145">'+theta+'°</text><text x="267" y="185">r='+r+'</text><text x="250" y="90">sector</text></svg>';}
+function svgCentralAngle(arc){return '<svg viewBox="0 0 430 330"><circle cx="215" cy="165" r="110" fill="none" stroke="#34324a" stroke-width="4"/><path d="M145 250 A110 110 0 0 0 285 250" fill="none" stroke="#ffdce8" stroke-width="8"/><line x1="215" y1="165" x2="145" y2="250" stroke="#b9a7f4" stroke-width="4"/><line x1="215" y1="165" x2="285" y2="250" stroke="#b9a7f4" stroke-width="4"/><circle cx="215" cy="165" r="4"/><text x="202" y="160">O</text><text x="175" y="292">arc '+arc+'°</text><text x="210" y="222" text-anchor="middle">?</text></svg>';}
+function svgParallelCut(ad,db,ae,ec){return '<svg viewBox="0 0 430 330"><polygon points="215,45 75,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="150" y1="160" x2="280" y2="160" stroke="#b9a7f4" stroke-width="5"/><text x="207" y="35">A</text><text x="52" y="300">B</text><text x="365" y="300">C</text><text x="136" y="154">D</text><text x="285" y="154">E</text><text x="112" y="112">AD='+ad+'</text><text x="93" y="224">DB='+db+'</text><text x="265" y="112">AE='+ae+'</text><text x="296" y="224">EC='+ec+'</text><text x="185" y="148">DE ∥ BC</text></svg>';}
+function svgMidline(de,bc){return '<svg viewBox="0 0 430 330"><polygon points="215,45 75,275 360,275" fill="none" stroke="#34324a" stroke-width="4"/><line x1="145" y1="160" x2="288" y2="160" stroke="#b9a7f4" stroke-width="5"/><text x="207" y="35">A</text><text x="52" y="300">B</text><text x="365" y="300">C</text><text x="132" y="154">D</text><text x="292" y="154">E</text><text x="178" y="145">DE='+de+'</text><text x="198" y="302">BC='+bc+'</text><text x="182" y="180">D,E midpoints</text></svg>';}
+function svgCongruence(label,a,b,c,d,e,f,ang1,ang2){a=a||'';b=b||'';c=c||'';d=d||'';e=e||'';f=f||'';ang1=ang1||'';ang2=ang2||'';return '<svg viewBox="0 0 430 330"><polygon points="90,260 160,80 250,260" fill="none" stroke="#34324a" stroke-width="4"/><polygon points="280,260 340,80 410,260" fill="none" stroke="#34324a" stroke-width="4"/><text x="150" y="70">A</text><text x="70" y="285">B</text><text x="250" y="285">C</text><text x="335" y="70">D</text><text x="270" y="285">E</text><text x="410" y="285">F</text><text x="110" y="165">'+a+'</text><text x="185" y="295">'+b+'</text><text x="210" y="165">'+c+'</text><text x="300" y="165">'+d+'</text><text x="360" y="295">'+e+'</text><text x="380" y="165">'+f+'</text><text x="155" y="125" text-anchor="middle">'+ang1+'</text><text x="335" y="125" text-anchor="middle">'+ang1+'</text><text x="120" y="240" text-anchor="middle">'+ang2+'</text><text x="300" y="240" text-anchor="middle">'+ang2+'</text></svg>';}
+function safeFns(arr){return arr.filter(function(fn){return typeof fn==='function';});}
+function getBank(){
+  var bank={
+    similarity:safeFns([qSimilarScale,qSimilarPerimeter,qSimilarityMissingSide,qTriangleMidlineRatio,qParallelCutRatio,qSimilarityAA,qSimilaritySAS,qAreaScale,qAngleBisectorArea,qCeva,qSymmedian]),
+    circles:safeFns([qIntersectChords,qTangentSecant,qCyclicPtolemy,qSecantQuadratic,qTangentRadiusArea,qBrokenChord,qEqualPowers,qInscribedAngleArc,qTangentChordAngle,qCentralAngleArc,qCircleSectorArea]),
+    coordinate:safeFns([qCoordinateRectangleArea,qSlopeParallel,qDistanceSquared,qCoordinateArea,qMidpointDistance,qShoelaceParam]),
+    area:safeFns([qTrapezoid,qShadedRectangle,qParallelogramTriangleArea,qMedialArea,qMedianArea,qViviani,qAreaScale,qAngleBisectorArea]),
+    right:safeFns([qPythagoreanMissingLeg,qThirtySixtyNinety,qAltitudeHypotenuse,qScaledTriple,qSemicircleChord,qRightRatio,qMedianLength]),
+    angles:safeFns([qPolygonInterior,qParallelAlgebra,qAltInterior,qCorrespondingAngles,qExteriorAlgebra,qCyclicAngle,qTriangleAngleSum,qIsoscelesBaseAngle,qIncenterAngle]),
+    counting:safeFns([qGridSquares,qRectGridCount,qDiagonals,qHandshakeDiagonals,qPolygonTriangulations,qTriangleCounting,qIntegerIsosceles]),
+    proofs:safeFns([qParallelogramProof,qRhombusProof,qKiteProof,qRhombusDiagonals,qSSSReason,qSASReason,qASAReason,qAASReason,qHLReason,qSimilarityReason,qSASSimilarityReason,qSSSSimilarityReason,qCPCTC]),
+    bonus:safeFns([qMenelaus,qEulerLine,qSymmedian,qTangentSecant,qSecantQuadratic,qIntersectChords,qCeva,qShoelaceParam,qBrokenChord,qViviani,qCentroidRatio,qEqualPowers,qCyclicPtolemy,qSemicircleChord,qHandshakeDiagonals,qTriangleMidlineRatio,qInscribedAngleArc,qShadedRectangle,qThirtySixtyNinety,qSimilarityAA,qSimilaritySAS,qHLReason])
+  };
+  bank.mixed=[].concat(
+    bank.coordinate,bank.circles,bank.counting,bank.area,bank.angles,bank.proofs,
+    bank.coordinate,bank.circles,bank.counting,bank.area,
+    bank.similarity,bank.right
+  );
+  return bank;
+}
+function runSelfTests(){var bank=getBank();var required=['mixed','bonus','similarity','circles','coordinate','area','right','angles','counting','proofs'];required.forEach(function(key){console.assert(Array.isArray(bank[key])&&bank[key].length>0,key+' bank exists');bank[key].forEach(function(fn){for(var t=0;t<10;t++){var c=fn();console.assert(c&&c.title&&c.answer,key+' case title/answer');console.assert(Array.isArray(c.choices)&&c.choices.indexOf(c.answer)>-1,c.title+' includes answer');console.assert(new Set(c.choices).size===c.choices.length,c.title+' unique choices');console.assert(Array.isArray(c.steps)&&c.steps.length>0,c.title+' has steps');console.assert(typeof c.diagram==='string'&&c.diagram.indexOf('<svg')>-1,c.title+' has SVG diagram');console.assert(!/NaN|undefined|null/.test(String(c.prompt)+String(c.answer)+String(c.diagram)),c.title+' has no broken generated values');}});});console.log('Geometry Case Files self-tests passed: app loads and each generator survived 10 randomized checks.');}
+function triggerConfetti(){for(let i=0;i<25;i++){const c=document.createElement('div');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.background=['#ff9fc5','#72d6a0','#90c7ff','#ffdce8','#b9a7f4'][Math.floor(Math.random()*5)];c.style.animationDuration=(0.8+Math.random()*0.6)+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),1200);}}
+try{updateStats();}catch(e){console.error('Startup display update failed:',e);}
+</script>
+
+</body>
+</html>
