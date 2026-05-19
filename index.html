@@ -6,9 +6,9 @@
 <title>Nitrogen Discovery Lab</title>
 <style>
 :root{
-  --bg1:#3d2b1f;
-  --bg2:#603b2a;
-  --bg3:#f1fff4;
+  --bg1:#eaf5ff;
+  --bg2:#f1fff5;
+  --bg3:#fbf7ff;
   --ink:#172235;
   --muted:#5f6f86;
   --card:rgba(255,255,255,.92);
@@ -33,6 +33,80 @@ body{
     radial-gradient(circle at 50% 95%, rgba(155,124,255,.20), transparent 28%),
     linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
 }
-  </script>
-  </body>
-  </html>
+.container{max-width:1180px;margin:auto;padding:24px 18px 50px;}
+.hero{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:20px;
+  align-items:stretch;
+  margin-bottom:20px;
+}
+.heroText,.atomPanel,.card{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+}
+.heroText{padding:30px;position:relative;overflow:hidden;}
+.heroText:after{
+  content:"N₂";
+  position:absolute;
+  right:22px;
+  bottom:-38px;
+  font-size:150px;
+  font-weight:900;
+  color:rgba(90,167,255,.13);
+}
+h1{font-size:clamp(38px,6vw,66px);line-height:.92;margin:0 0 12px;letter-spacing:-2px;}
+.subtitle{font-size:17px;line-height:1.55;color:var(--muted);max-width:720px;margin:0;}
+.atomPanel{padding:24px;display:grid;place-items:center;position:relative;overflow:hidden;}
+.atomWrap{width:220px;height:220px;position:relative;display:grid;place-items:center;}
+.nucleus{
+  width:88px;height:88px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--blue),var(--green));
+  color:white;font-size:38px;font-weight:900;box-shadow:0 14px 28px rgba(90,167,255,.3);z-index:3;
+}
+.orbit{position:absolute;width:190px;height:82px;border:2px solid rgba(23,34,53,.18);border-radius:50%;}
+.o1{transform:rotate(18deg);} .o2{transform:rotate(80deg);} .o3{transform:rotate(-38deg);}
+.dot{position:absolute;width:13px;height:13px;border-radius:50%;background:var(--purple);left:18px;top:34px;box-shadow:0 0 16px rgba(155,124,255,.9);animation:pulse 1.5s infinite alternate;}
+@keyframes pulse{from{transform:scale(.85)}to{transform:scale(1.25)}}
+.quickStats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px;}
+.stat{background:white;border-radius:20px;padding:15px;box-shadow:0 8px 20px rgba(25,43,70,.08);text-align:center;}
+.stat strong{display:block;font-size:24px;margin-bottom:4px;}.stat span{font-size:12px;color:var(--muted);}
+.card{padding:22px;margin-bottom:20px;}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+.tab,.actionBtn{
+  border:0;border-radius:999px;padding:12px 16px;background:white;color:var(--ink);
+  font-weight:800;cursor:pointer;box-shadow:0 7px 16px rgba(25,43,70,.1);transition:.15s;
+}
+.tab:hover,.actionBtn:hover{transform:translateY(-2px);}
+.tab.active{background:linear-gradient(135deg,var(--deepblue),var(--green));color:white;}
+.mainGrid{display:grid;grid-template-columns:.95fr 1.05fr;gap:18px;align-items:start;}
+.learnPanel,.quizPanel{background:white;border-radius:24px;padding:22px;box-shadow:0 10px 24px rgba(25,43,70,.08);}
+h2{font-size:28px;margin:0 0 10px;} h3{font-size:19px;margin:18px 0 8px;}
+p{line-height:1.55;color:var(--muted);} 
+.tag{display:inline-block;background:#eef6ff;color:#24518d;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800;margin-bottom:10px;}
+.factGrid{display:grid;gap:10px;margin-top:14px;}
+.fact{border-left:5px solid var(--blue);background:#f5f9ff;border-radius:15px;padding:13px;line-height:1.45;font-size:14px;}
+.fact.green{border-left-color:var(--green);background:#effff7;}
+.fact.purple{border-left-color:var(--purple);background:#f7f3ff;}
+.fact.yellow{border-left-color:#f6c85f;background:#fff9e9;}
+.visualBox{border:2px dashed var(--line);border-radius:20px;padding:18px;text-align:center;background:#fbfdff;margin-top:14px;}
+.molecule{font-size:44px;font-weight:900;letter-spacing:2px;margin:8px 0;color:var(--deepblue);}
+.small{font-size:13px;color:var(--muted);} 
+.question{font-size:21px;font-weight:900;line-height:1.35;margin:14px 0;}
+.answers{display:grid;gap:10px;margin-top:12px;}
+.answer{width:100%;border:2px solid transparent;border-radius:16px;padding:13px;background:#f8fafc;text-align:left;cursor:pointer;font-weight:700;}
+.answer:hover{background:#eef6ff;}.answer.correct{background:#e8fff3;border-color:var(--green);}.answer.wrong{background:#fff0f0;border-color:var(--red);}
+.feedback{display:none;margin-top:14px;padding:13px;border-radius:16px;background:#fff8df;color:#695000;line-height:1.45;}
+.progress{height:14px;background:#e6eef8;border-radius:999px;overflow:hidden;margin:12px 0;}
+.bar{height:100%;width:0%;background:linear-gradient(90deg,var(--blue),var(--green));transition:.3s;}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}.primary{background:linear-gradient(135deg,var(--purple),var(--deepblue));color:white;}.secondary{background:#f1f5f9;}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px;}.badge{border:2px dashed #d7e2ef;border-radius:18px;background:#f8fafc;padding:12px;text-align:center;color:var(--muted);font-weight:800;font-size:13px;}.badge.unlocked{border:2px solid var(--green);background:#effff7;color:var(--ink);}.emoji{display:block;font-size:26px;margin-bottom:4px;}
+.table{width:100%;border-collapse:collapse;margin-top:12px;border-radius:16px;overflow:hidden;}.table th,.table td{padding:12px;border-bottom:1px solid #e9eef5;text-align:left;font-size:14px;vertical-align:top;}.table th{background:#f4f8ff;}
+.final{display:none;text-align:center;padding:20px;}.bigScore{font-size:70px;font-weight:900;background:linear-gradient(135deg,var(--blue),var(--green),var(--purple));-webkit-background-clip:text;color:transparent;margin:8px 0;}
+.extraGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px;}.miniCard{background:#f8fafc;border-radius:18px;padding:14px;line-height:1.45;font-size:14px;}
+@media(max-width:900px){.hero,.mainGrid{grid-template-columns:1fr}.quickStats{grid-template-columns:repeat(2,1fr)}.badges,.extraGrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
