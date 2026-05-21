@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Civil War Field Hospital Simulator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #f7fbff, #f7f4ff, #f4fff9);
+      color: #61708f;
+      overflow-x: hidden;
+    }
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(201,225,255,0.5), transparent 30%),
+        radial-gradient(circle at top right, rgba(240,220,255,0.4), transparent 35%),
+        radial-gradient(circle at bottom, rgba(219,255,235,0.45), transparent 35%);
+      z-index: -1;
+    }
+
+    .app {
+      width: min(1100px, 92%);
+      margin: auto;
+      padding: 40px 0 100px;
+    }
+
+    .hero {
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(16px);
+      border-radius: 40px;
+      padding: 50px;
+      box-shadow: 0 20px 70px rgba(180,210,255,0.18);
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    .tag {
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 12px;
+      color: #91a6c7;
+    }
+
+    h1 {
+      font-weight: 300;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 0.95;
+      margin: 12px 0;
+      color: #5d6f90;
+    }
+
+    .subtitle {
+      max-width: 700px;
+      line-height: 1.7;
+      font-size: 1.05rem;
+    }
+
+    .stats {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+      gap: 16px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,0.85);
+      box-shadow: 0 10px 35px rgba(190,210,255,0.12);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #93a4bf;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    .event-card {
+      margin-top: 28px;
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(16px);
+      border-radius: 40px;
+      padding: 36px;
+      border: 1px solid rgba(255,255,255,0.85);
+      box-shadow: 0 20px 60px rgba(180,210,255,0.16);
+    }
+
+    .event-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .event-type {
+      margin: 0;
+      color: #96abd0;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 12px;
+    }
+
+    h2 {
+      margin: 8px 0;
+      font-size: 2.2rem;
+      font-weight: 400;
+      color: #607090;
+    }
+
+    .day {
+      min-width: 90px;
+      height: 90px;
+      border-radius: 30px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg,#eef7ff,#f8f1ff);
+      color: #6d7ea1;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .event-scene {
+      margin-top: 18px;
+      line-height: 1.8;
+    }
+
+    .choices {
+      margin-top: 28px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .choice {
+      border: none;
+      text-align: left;
+      border-radius: 28px;
+      padding: 20px;
+      background: linear-gradient(135deg,#ffffff,#f5f9ff);
+      color: #5d6f90;
+      cursor: pointer;
+      transition: 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow: 0 8px 25px rgba(200,220,255,0.12);
+      font: inherit;
+    }
+
+    .choice:hover {
+      transform: translateY(-3px);
+      background: linear-gradient(135deg,#fbfdff,#eef8ff);
+    }
+
+    .log-section {
+      margin-top: 28px;
+      background: rgba(255,255,255,0.68);
+      backdrop-filter: blur(12px);
+      border-radius: 36px;
+      padding: 28px;
+    }
+
+    .log-item {
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(150,170,210,0.15);
+    }
+
+    @media (max-width: 700px) {
+      .hero, .event-card, .log-section { padding: 24px; }
+      .event-top { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+
+  <main class="app">
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="tag">Interactive Civil War Medical Simulation</p>
+        <h1>Civil War Medicine:<br>Field Hospital Simulator</h1>
+        <p class="subtitle">
+          Manage sanitation, surgery, disease outbreaks, morale, and survival during the Civil War.
+        </p>
+      </div>
+    </section>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="event-card">
+      <div class="event-top">
+        <div>
+          <p class="event-type" id="eventType"></p>
+          <h2 id="eventTitle"></h2>
+        </div>
+        <div class="day" id="dayCounter"></div>
+      </div>
+
+      <p class="event-scene" id="eventScene"></p>
+
+      <div class="choices" id="choices"></div>
+    </section>
+
+    <section class="log-section">
+      <h3>Decision Log</h3>
+      <div id="log"></div>
+    </section>
+  </main>
+
+  <script>
+    const game = {
+      day: 1,
+      score: 0,
+      sanitation: 55,
+      morale: 65,
+      supplies: 60,
+      disease: 30,
+      survivors: 0
+    };
+
+    const statsEl = document.getElementById("stats");
+    const titleEl = document.getElementById("eventTitle");
+    const typeEl = document.getElementById("eventType");
+    const sceneEl = document.getElementById("eventScene");
+    const choicesEl = document.getElementById("choices");
+    const logEl = document.getElementById("log");
+    const dayEl = document.getElementById("dayCounter");
+
+    const events = [
+      {
+        type: "Disease Outbreak",
+        title: "Typhoid Fever Spreads Through Camp",
+        scene: "Crowded tents and contaminated water are causing fever outbreaks throughout the hospital grounds.",
+        choices: [
+          ["Quarantine infected soldiers and clean water supplies", 10],
+          ["Continue normal operations to preserve morale", -5],
+          ["Focus only on medicine distribution", 2],
+          ["Reduce food rations to save resources", -2]
+        ]
+      },
+      {
+        type: "Surgical Crisis",
+        title: "Severe Battlefield Injuries Arrive",
+        scene: "A transport wagon arrives carrying soldiers with shattered limbs and major blood loss.",
+        choices: [
+          ["Perform rapid amputations on critical patients", 8],
+          ["Delay surgeries until conditions improve", -7],
+          ["Treat only lightly wounded soldiers", -3],
+          ["Prioritize sanitation before procedures", 5]
+        ]
+      },
+      {
+        type: "Hospital Ethics",
+        title: "Overcrowding Begins to Collapse Recovery Wards",
+        scene: "Too many patients are sharing limited recovery space, increasing infection risk.",
+        choices: [
+          ["Separate contagious patients immediately", 9],
+          ["Preserve space for officers only", -6],
+          ["Avoid moving patients to reduce panic", -4],
+          ["Expand temporary pavilion wards", 7]
+        ]
+      },
+      {
+        type: "Medical Knowledge",
+        title: "Doctors Debate Miasma Theory",
+        scene: "Some doctors blame foul air for illness, while others argue that cleaning bedding and separating patients may matter more.",
+        choices: [
+          ["Improve airflow, clean bedding, and separate the sickest patients", 9],
+          ["Only cover foul smells with lime", 1],
+          ["Ignore the ward conditions and continue surgery", -6],
+          ["Move all patients outside overnight", -4]
+        ]
+      },
+      {
+        type: "Resource Management",
+        title: "Quinine Supply Runs Low",
+        scene: "Malaria cases are increasing, but the hospital has only a small amount of quinine left.",
+        choices: [
+          ["Use quinine for likely malaria cases and improve camp location", 8],
+          ["Give quinine to every fever patient", 1],
+          ["Save all quinine for later", -4],
+          ["Trade quinine for extra bandages", -2]
+        ]
+      }
+    ];
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function renderStats() {
+      statsEl.innerHTML = `
+        <div class="stat">
+          <div class="stat-label">Day</div>
+          <div class="stat-value">${game.day}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Score</div>
+          <div class="stat-value">${game.score}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Supplies</div>
+          <div class="stat-value">${game.supplies}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Sanitation</div>
+          <div class="stat-value">${game.sanitation}</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Morale</div>
+          <div class="stat-value">${game.morale}</div>
+        </div>
+      `;
+    }
+
+    function applyChoice(points) {
+      game.score = Math.max(0, game.score + points);
+      game.day += 1;
+
+      game.supplies = Math.max(0, game.supplies - Math.floor(Math.random() * 5));
+      game.sanitation = Math.max(0, game.sanitation - Math.floor(Math.random() * 4));
+      game.morale = Math.max(0, game.morale - Math.floor(Math.random() * 3));
+    }
+
+    function nextEvent() {
+      const event = events[Math.floor(Math.random() * events.length)];
+
+      typeEl.textContent = event.type;
+      titleEl.textContent = event.title;
+      sceneEl.textContent = event.scene;
+      dayEl.textContent = `Day ${game.day}`;
+
+      choicesEl.innerHTML = "";
+
+      shuffle(event.choices).forEach(choice => {
+        const button = document.createElement("button");
+        button.className = "choice";
+        button.textContent = choice[0];
+
+        button.onclick = () => {
+          applyChoice(choice[1]);
+
+          const log = document.createElement("div");
+          log.className = "log-item";
+          log.textContent = `${event.title}: ${choice[0]}`;
+          logEl.prepend(log);
+
+          renderStats();
+
+          if (game.day > 20) {
+            titleEl.textContent = "Simulation Complete";
+            typeEl.textContent = "Final Report";
+            sceneEl.textContent = `Final Score: ${game.score}. You managed the hospital through 20 days of Civil War medical crises.`;
+            choicesEl.innerHTML = "";
+            dayEl.textContent = "Done";
+          } else {
+            nextEvent();
+          }
+        };
+
+        choicesEl.appendChild(button);
+      });
+    }
+
+    renderStats();
+    nextEvent();
+  </script>
+</body>
+</html>
